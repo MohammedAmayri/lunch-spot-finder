@@ -1,16 +1,16 @@
+
 import React, { useState, useEffect, useCallback } from "react";
 import {
   EmblaCarouselType,
   EmblaOptionsType,
   EmblaPluginType
 } from "embla-carousel";
-import { useEmblaCarousel } from "embla-carousel-react";
+import useEmblaCarousel from "embla-carousel-react";
 import {
   ArrowLeft,
   ArrowRight,
   Dot,
-  ImageIcon,
-  Placeholder
+  ImageIcon
 } from "lucide-react";
 
 interface Props {
@@ -127,3 +127,24 @@ const Carousel = ({ slides, options = {}, plugins = [] }: Props) => {
 };
 
 export default Carousel;
+
+// Export carousel components
+export const CarouselContent = ({ children, className }: { children: React.ReactNode, className?: string }) => (
+  <div className={`flex ${className || ''}`}>{children}</div>
+);
+
+export const CarouselItem = ({ children, className }: { children: React.ReactNode, className?: string }) => (
+  <div className={`min-w-0 ${className || ''}`}>{children}</div>
+);
+
+export const CarouselNext = ({ className }: { className?: string }) => (
+  <button className={`absolute rounded-full ${className || ''}`}>
+    <ArrowRight size={16} />
+  </button>
+);
+
+export const CarouselPrevious = ({ className }: { className?: string }) => (
+  <button className={`absolute rounded-full ${className || ''}`}>
+    <ArrowLeft size={16} />
+  </button>
+);

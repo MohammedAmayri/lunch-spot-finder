@@ -4,13 +4,7 @@ import { Link } from 'react-router-dom';
 import { MapPin, Coffee, Salad, Sandwich, ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Restaurant, LunchMenuItem, Tag } from '../data/mockData';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+import Carousel, { CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import {
   Tooltip,
   TooltipContent,
@@ -125,115 +119,93 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, index }) =>
           </div>
           
           <Carousel
-            opts={{ loop: true }}
-            className="w-full"
-            onSelect={(api) => {
-              if (api) {
-                setCurrentSlide(api.selectedScrollSnap());
-              }
-            }}
-          >
-            <CarouselContent className="-ml-2 md:-ml-4">
-              {lunchMenuItems.map((item: LunchMenuItem, i: number) => (
-                <CarouselItem key={item.id} className="pl-2 md:pl-4 basis-full md:basis-1/1 lg:basis-1/1">
-                  <div className="bg-gray-50 rounded-xl overflow-hidden relative">
-                    <div className="relative h-64 w-full">
-                      <img 
-                        src={(item.images && item.images.length > 0) ? item.images[0].url : getRandomPlaceholderImage()} 
-                        alt={item.name} 
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                    </div>
-                    <div className="p-5">
-                      <div className="flex flex-col">
-                        <div className="flex justify-between items-center mb-2">
-                          <h4 
-                            className="text-2xl font-bold text-gray-900 truncate max-w-[70%]" 
-                            title={removeDayPrefix(item.name)}
-                          >
-                            {removeDayPrefix(item.name)}
-                          </h4>
-                          <span className="text-xl font-bold text-gray-900">{Number(item.price)} kr</span>
+            slides={lunchMenuItems.map((item, i) => ({
+              id: item.id,
+              src: (item.images && item.images.length > 0) ? item.images[0].url : getRandomPlaceholderImage(),
+              alt: item.name
+            }))}
+            options={{ loop: true }}
+          />
+          
+          {/* Menu Item Details */}
+          {lunchMenuItems.length > 0 && (
+            <div className="bg-gray-50 rounded-xl p-4 mt-4">
+              <div className="flex justify-between items-center mb-2">
+                <h4 className="text-xl font-bold text-gray-900">
+                  {removeDayPrefix(lunchMenuItems[currentSlide]?.name || '')}
+                </h4>
+                <span className="text-xl font-bold text-gray-900">
+                  {lunchMenuItems[currentSlide]?.price || 0} kr
+                </span>
+              </div>
+              
+              <div className="flex justify-between items-center">
+                {/* Opening Hours */}
+                <div className="text-base text-gray-600">
+                  {hoursText}
+                </div>
+                
+                {/* Included Items */}
+                <div className="flex items-center space-x-4">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className={cn(
+                          "p-1.5", 
+                          hasExtra(lunchMenuItems[currentSlide]?.tags || [], 'coffee') 
+                            ? "text-gray-800" 
+                            : "text-gray-300"
+                        )}>
+                          <Coffee size={24} />
                         </div>
-                        
-                        <div className="flex justify-between items-center">
-                          {/* Opening Hours */}
-                          <div className="text-base text-gray-600">
-                            {hoursText}
-                          </div>
-                          
-                          {/* Included Items */}
-                          <div className="flex items-center space-x-4">
-                            <TooltipProvider>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <div className={cn(
-                                    "p-1.5", 
-                                    hasExtra(item.tags, 'coffee') 
-                                      ? "text-gray-800" 
-                                      : "text-gray-300"
-                                  )}>
-                                    <Coffee size={24} />
-                                  </div>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>{hasExtra(item.tags, 'coffee') 
-                                    ? "Coffee included" 
-                                    : "Coffee not included"}</p>
-                                </TooltipContent>
-                              </Tooltip>
-                              
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <div className={cn(
-                                    "p-1.5", 
-                                    hasExtra(item.tags, 'salad') 
-                                      ? "text-gray-800" 
-                                      : "text-gray-300"
-                                  )}>
-                                    <Salad size={24} />
-                                  </div>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>{hasExtra(item.tags, 'salad') 
-                                    ? "Salad included" 
-                                    : "Salad not included"}</p>
-                                </TooltipContent>
-                              </Tooltip>
-                              
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <div className={cn(
-                                    "p-1.5", 
-                                    hasExtra(item.tags, 'dessert') 
-                                      ? "text-gray-800" 
-                                      : "text-gray-300"
-                                  )}>
-                                    <Sandwich size={24} className="rotate-45" />
-                                  </div>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>{hasExtra(item.tags, 'dessert') 
-                                    ? "Dessert included" 
-                                    : "Dessert not included"}</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
-                          </div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{hasExtra(lunchMenuItems[currentSlide]?.tags || [], 'coffee') 
+                          ? "Coffee included" 
+                          : "Coffee not included"}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className={cn(
+                          "p-1.5", 
+                          hasExtra(lunchMenuItems[currentSlide]?.tags || [], 'salad') 
+                            ? "text-gray-800" 
+                            : "text-gray-300"
+                        )}>
+                          <Salad size={24} />
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            
-            <div className="sm:block mt-2">
-              <CarouselPrevious className="-left-3 h-8 w-8" />
-              <CarouselNext className="-right-3 h-8 w-8" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{hasExtra(lunchMenuItems[currentSlide]?.tags || [], 'salad') 
+                          ? "Salad included" 
+                          : "Salad not included"}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className={cn(
+                          "p-1.5", 
+                          hasExtra(lunchMenuItems[currentSlide]?.tags || [], 'dessert') 
+                            ? "text-gray-800" 
+                            : "text-gray-300"
+                        )}>
+                          <Sandwich size={24} className="rotate-45" />
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{hasExtra(lunchMenuItems[currentSlide]?.tags || [], 'dessert') 
+                          ? "Dessert included" 
+                          : "Dessert not included"}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              </div>
             </div>
-          </Carousel>
+          )}
         </div>
         
         {/* Link to Restaurant Detail */}

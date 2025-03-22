@@ -4,11 +4,7 @@ import { ChevronDown, Utensils, DollarSign, Star, Filter, X } from 'lucide-react
 import { motion, AnimatePresence } from 'framer-motion';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Checkbox } from '@/components/ui/checkbox';
-import { 
-  Carousel, 
-  CarouselContent, 
-  CarouselItem
-} from '@/components/ui/carousel';
+import Carousel, { CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import {
   Popover,
   PopoverContent,
@@ -257,7 +253,15 @@ const FilterBar: React.FC<FilterBarProps> = ({
         className="flex gap-2 max-w-full"
       >
         {isMobile ? (
-          <Carousel className="w-full">
+          <Carousel
+            slides={[
+              { id: 1, src: '', alt: 'filters' },
+              { id: 2, src: '', alt: 'price' },
+              { id: 3, src: '', alt: 'food-type' },
+              { id: 4, src: '', alt: 'rating' }
+            ]}
+            options={{ loop: false }}
+          >
             <CarouselContent className="-ml-2">
               <CarouselItem className="pl-2 basis-auto">
                 <div className="filter-button flex items-center">

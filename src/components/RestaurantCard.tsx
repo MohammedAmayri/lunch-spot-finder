@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Coffee, Salad, Sandwich, ExternalLink } from 'lucide-react';
@@ -48,6 +47,12 @@ const placeholderImages = [
 const getRandomPlaceholderImage = () => {
   const randomIndex = Math.floor(Math.random() * placeholderImages.length);
   return placeholderImages[randomIndex];
+};
+
+// Helper to remove day prefix from menu names
+const removeDayPrefix = (name: string): string => {
+  const dayPattern = /^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday): /i;
+  return name.replace(dayPattern, '');
 };
 
 const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, index }) => {
@@ -103,7 +108,9 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, index }) =>
                   <div className="p-5">
                     <div className="flex flex-col">
                       <div className="flex justify-between items-center mb-2">
-                        <h4 className="text-2xl font-bold text-gray-900">{item.name}</h4>
+                        <h4 className="text-2xl font-bold text-gray-900 truncate max-w-[70%]" title={removeDayPrefix(item.name)}>
+                          {removeDayPrefix(item.name)}
+                        </h4>
                         <span className="text-xl font-bold text-gray-900">{item.price} kr</span>
                       </div>
                       

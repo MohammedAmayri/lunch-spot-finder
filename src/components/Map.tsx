@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -147,6 +146,28 @@ const Map: React.FC<MapProps> = ({
       .leaflet-attribution-flag {
         display: none !important;
       }
+      /* Custom marker styles */
+      .marker-icon {
+        background-color: white;
+        border: 2px solid #00A67E;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+        transition: all 0.2s ease;
+      }
+      .marker-icon.selected {
+        background-color: #00A67E;
+        transform: scale(1.1);
+      }
+      .marker-icon svg {
+        width: 60%;
+        height: 60%;
+      }
+      .marker-icon.selected svg {
+        color: white;
+      }
     `;
     document.head.appendChild(style);
     
@@ -190,22 +211,27 @@ const Map: React.FC<MapProps> = ({
       
       const { lat, lng } = restaurant.location.coordinates;
       
-      // Create custom marker icon with subtle branded styling
+      // Create improved marker icon
+      const isSelected = selectedRestaurant?.id === restaurant.id;
+      
+      // Create custom HTML marker with cleaner design
       const customIcon = L.divIcon({
-        className: 'custom-marker-icon',
+        className: '',
         html: `
-          <div class="${selectedRestaurant?.id === restaurant.id 
-            ? 'bg-brand-500 text-white shadow-lg transform scale-110' 
-            : 'bg-white text-gray-700 border border-gray-200 shadow-md'} 
-            p-2 rounded-full cursor-pointer transition-all duration-300 hover:scale-110 hover:shadow-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <div class="marker-icon ${isSelected ? 'selected' : ''}" 
+               style="width: 36px; height: 36px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" 
+                 fill="none" stroke="currentColor" stroke-width="2.5" 
+                 stroke-linecap="round" stroke-linejoin="round" 
+                 style="color: ${isSelected ? 'white' : '#00A67E'}">
               <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
               <circle cx="12" cy="10" r="3"></circle>
             </svg>
           </div>
         `,
-        iconSize: [28, 28],
-        iconAnchor: [14, 28]
+        iconSize: [36, 36],
+        iconAnchor: [18, 36],
+        popupAnchor: [0, -36]
       });
       
       // Create and add marker to map
@@ -219,10 +245,10 @@ const Map: React.FC<MapProps> = ({
         );
       });
       
-      // Create popup with restaurant info using a more subtle design
+      // Create popup with restaurant info
       const popup = L.popup({
         closeButton: false,
-        offset: [0, -15],
+        offset: [0, -20],
         className: 'custom-popup',
       }).setContent(`
         <div class="p-1">

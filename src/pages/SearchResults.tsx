@@ -51,6 +51,16 @@ const SearchResults = () => {
     
     return true;
   });
+
+  // Scroll to restaurant when selected from map
+  useEffect(() => {
+    if (selectedRestaurant) {
+      const restaurantElement = document.getElementById(`restaurant-${selectedRestaurant.id}`);
+      if (restaurantElement) {
+        restaurantElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+  }, [selectedRestaurant]);
   
   return (
     <AnimatedPage className="min-h-screen bg-gray-50">
@@ -133,11 +143,16 @@ const SearchResults = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {filteredRestaurants.map((restaurant, index) => (
-                <RestaurantCard 
+                <div 
                   key={restaurant.id} 
-                  restaurant={restaurant} 
-                  index={index}
-                />
+                  id={`restaurant-${restaurant.id}`}
+                  className={`${selectedRestaurant?.id === restaurant.id ? 'ring-2 ring-brand-500 rounded-xl' : ''}`}
+                >
+                  <RestaurantCard 
+                    restaurant={restaurant} 
+                    index={index}
+                  />
+                </div>
               ))}
               
               {filteredRestaurants.length === 0 && (

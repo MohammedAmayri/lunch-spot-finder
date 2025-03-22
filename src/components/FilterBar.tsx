@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
-import { ChevronDown, Utensils, DollarSign, Star, Filter, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronDown, Utensils, DollarSign, X } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Checkbox } from '@/components/ui/checkbox';
 import Carousel from '@/components/ui/carousel';
@@ -49,10 +50,6 @@ const FilterBar: React.FC<FilterBarProps> = ({
     } else {
       setTypeFilters([...typeFilters, type]);
     }
-  };
-  
-  const toggleRatingFilter = (rating: number) => {
-    setRatingFilter(ratingFilter === rating ? null : rating);
   };
 
   const cuisineOptions = commonCuisines.map(cuisine => cuisine.name);
@@ -176,65 +173,10 @@ const FilterBar: React.FC<FilterBarProps> = ({
     </Popover>
   );
 
-  const RatingFilter = () => (
-    <Popover>
-      <PopoverTrigger asChild>
-        <button className={`filter-button ${ratingFilter ? 'active' : ''}`}>
-          <Star size={16} className="text-gray-600" />
-          <span>Rating</span>
-          <ChevronDown size={14} className="text-gray-500" />
-        </button>
-      </PopoverTrigger>
-      <PopoverContent className="w-48 p-4">
-        <div className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h4 className="font-medium">Minimum Rating</h4>
-            {ratingFilter && (
-              <button 
-                onClick={() => setRatingFilter(null)}
-                className="text-xs text-gray-500 hover:text-gray-700 flex items-center"
-              >
-                <X size={12} className="mr-1" />
-                Clear
-              </button>
-            )}
-          </div>
-          
-          <div className="space-y-2">
-            {[4, 3, 2].map((rating) => (
-              <div 
-                key={rating}
-                className={`flex items-center py-2 px-3 rounded cursor-pointer hover:bg-gray-50 ${ratingFilter === rating ? 'bg-brand-50 text-brand-600' : ''}`}
-                onClick={() => toggleRatingFilter(rating)}
-              >
-                <div className="flex">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star 
-                      key={i} 
-                      size={16} 
-                      className={`${i < rating ? 'text-amber-400 fill-amber-400' : 'text-gray-300'} mr-0.5`} 
-                    />
-                  ))}
-                </div>
-                <span className="ml-2 text-sm">{rating}+ stars</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </PopoverContent>
-    </Popover>
-  );
-
   const filterButtons = (
     <>
-      <div className="filter-button flex items-center min-w-fit">
-        <Filter size={16} className="text-gray-600 mr-1.5" />
-        <span>Filters</span>
-      </div>
-      
       <PriceFilter />
       <FoodTypeFilter />
-      <RatingFilter />
     </>
   );
 
@@ -250,31 +192,18 @@ const FilterBar: React.FC<FilterBarProps> = ({
           <div className="w-full">
             <Carousel
               slides={[
-                { id: 1, src: '', alt: 'filters' },
-                { id: 2, src: '', alt: 'price' },
-                { id: 3, src: '', alt: 'food-type' },
-                { id: 4, src: '', alt: 'rating' }
+                { id: 1, src: '', alt: 'price' },
+                { id: 2, src: '', alt: 'food-type' }
               ]}
               options={{ loop: false }}
             />
             <CarouselContent className="-ml-2">
-              <CarouselItem className="pl-2 basis-auto">
-                <div className="filter-button flex items-center">
-                  <Filter size={16} className="text-gray-600 mr-1.5" />
-                  <span>Filters</span>
-                </div>
-              </CarouselItem>
-              
               <CarouselItem className="pl-2 basis-auto">
                 <PriceFilter />
               </CarouselItem>
               
               <CarouselItem className="pl-2 basis-auto">
                 <FoodTypeFilter />
-              </CarouselItem>
-              
-              <CarouselItem className="pl-2 basis-auto">
-                <RatingFilter />
               </CarouselItem>
             </CarouselContent>
           </div>

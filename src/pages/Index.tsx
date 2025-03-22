@@ -13,19 +13,14 @@ const Index = () => {
         {/* Header stays on top for all devices */}
         <Header />
         
-        {/* Left side - Image section */}
+        {/* Left side - Green background section */}
         <motion.div 
           className="w-full md:w-1/2 h-[40vh] md:h-screen bg-brand-500 relative overflow-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
         >
-          <div 
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: "url('/lovable-uploads/d7cf2e90-c60b-45f7-a628-395aa45bbdea.png')" }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-b from-brand-600/20 to-brand-600/60"></div>
-          </div>
+          {/* No image, just green background */}
         </motion.div>
         
         {/* Right side - Content section */}

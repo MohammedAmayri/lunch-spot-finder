@@ -20,7 +20,10 @@ const Index = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
         >
-          <div className="absolute inset-0 bg-food-animation bg-cover bg-center">
+          <div 
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: "url('/lovable-uploads/bfb87e28-0ac2-4fa2-973d-3a344bdbe2be.png')" }}
+          >
             <div className="absolute inset-0 bg-gradient-to-b from-brand-600/20 to-brand-600/60"></div>
           </div>
         </motion.div>

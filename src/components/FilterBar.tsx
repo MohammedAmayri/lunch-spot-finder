@@ -4,8 +4,6 @@ import { ChevronDown, Utensils, DollarSign, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Checkbox } from '@/components/ui/checkbox';
-import Carousel from '@/components/ui/carousel';
-import { CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import {
   Popover,
   PopoverContent,
@@ -173,13 +171,6 @@ const FilterBar: React.FC<FilterBarProps> = ({
     </Popover>
   );
 
-  const filterButtons = (
-    <>
-      <PriceFilter />
-      <FoodTypeFilter />
-    </>
-  );
-
   return (
     <div className="w-full py-2">
       <motion.div 
@@ -189,27 +180,14 @@ const FilterBar: React.FC<FilterBarProps> = ({
         className="flex gap-2 max-w-full"
       >
         {isMobile ? (
-          <div className="w-full">
-            <Carousel
-              slides={[
-                { id: 1, src: '', alt: 'price' },
-                { id: 2, src: '', alt: 'food-type' }
-              ]}
-              options={{ loop: false }}
-            />
-            <CarouselContent className="-ml-2">
-              <CarouselItem className="pl-2 basis-auto">
-                <PriceFilter />
-              </CarouselItem>
-              
-              <CarouselItem className="pl-2 basis-auto">
-                <FoodTypeFilter />
-              </CarouselItem>
-            </CarouselContent>
+          <div className="w-full flex gap-2 overflow-x-auto hide-scrollbar pb-1">
+            <PriceFilter />
+            <FoodTypeFilter />
           </div>
         ) : (
           <div className="flex gap-2">
-            {filterButtons}
+            <PriceFilter />
+            <FoodTypeFilter />
           </div>
         )}
       </motion.div>

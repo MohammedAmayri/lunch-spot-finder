@@ -8,7 +8,6 @@ import {
   CarouselContent, 
   CarouselItem
 } from '@/components/ui/carousel';
-import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface FilterBarProps {
   priceFilters: number[];

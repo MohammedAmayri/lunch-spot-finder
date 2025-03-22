@@ -1,7 +1,7 @@
 
 import React, { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Star, MapPin, Clock, ArrowRight } from 'lucide-react';
+import { Star, MapPin, Clock, ArrowRight, Menu } from 'lucide-react';
 import { motion } from 'framer-motion';
 import {
   Carousel,
@@ -10,7 +10,15 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
+import { 
+  Tabs, 
+  TabsContent, 
+  TabsList, 
+  TabsTrigger 
+} from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
 import { Restaurant } from '../data/mockData';
+import { useCarousel } from 'embla-carousel-react';
 
 interface RestaurantCardProps {
   restaurant: Restaurant;
@@ -19,6 +27,7 @@ interface RestaurantCardProps {
 
 const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, index }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [activeMenu, setActiveMenu] = useState(restaurant.lunchMenus[0]?.id || '');
   
   // Helper function to format price range
   const formatPriceRange = () => {
@@ -57,20 +66,12 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, index }) =>
   // Limit to 5 images max
   const cardImages = allImages.slice(0, 5);
   
-  // Get popular menu items (up to 2)
-  const popularItems = lunchMenus.flatMap(menu => menu.lunchMenuItems).slice(0, 2);
-  
   // Helper to get lunch includes as string
-  const getLunchIncludes = () => {
-    const allIncludes = new Set<string>();
+  const getLunchIncludes = (menuId: string) => {
+    const menu = lunchMenus.find(m => m.id === menuId);
+    if (!menu) return '';
     
-    lunchMenus.forEach(menu => {
-      menu.lunchIncludes.forEach(item => {
-        allIncludes.add(item.name);
-      });
-    });
-    
-    return Array.from(allIncludes).join(', ');
+    return menu.lunchIncludes.map(item => item.name).join(', ');
   };
 
   // Animation variants for staggered children
@@ -87,7 +88,8 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, index }) =>
   
   const handleCarouselChange = useCallback((api: any) => {
     if (!api) return;
-    setCurrentImageIndex(api.selectedScrollSnap());
+    const scrollSnap = api.selectedScrollSnap();
+    setCurrentImageIndex(scrollSnap);
   }, []);
   
   return (
@@ -161,31 +163,71 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, index }) =>
           </div>
         )}
         
-        <div className="mt-auto space-y-3">
-          <div className="text-xs text-gray-500">
-            <span className="font-medium">Price range:</span> {formatPriceRange()}
-          </div>
-          
-          {getLunchIncludes() && (
+        {lunchMenus.length > 0 && (
+          <div className="mt-auto space-y-4">
             <div className="text-xs text-gray-500">
-              <span className="font-medium">Includes:</span> {getLunchIncludes()}
+              <span className="font-medium">Price range:</span> {formatPriceRange()}
             </div>
-          )}
-          
-          {popularItems.length > 0 && (
-            <div className="border-t border-gray-100 pt-3 mt-3">
-              <p className="text-xs font-medium text-gray-500 mb-2">Popular dishes:</p>
-              <div className="space-y-2">
-                {popularItems.map((item, i) => (
-                  <div key={i} className="flex justify-between text-sm">
-                    <span className="font-medium text-gray-700">{item.name}</span>
-                    <span className="text-gray-500">{item.price} kr</span>
+            
+            <Tabs 
+              defaultValue={activeMenu} 
+              onValueChange={setActiveMenu}
+              className="w-full"
+            >
+              {lunchMenus.length > 1 && (
+                <div className="flex items-center mb-3">
+                  <Menu className="h-4 w-4 mr-1 text-brand-500" />
+                  <span className="text-sm font-medium text-gray-700">Available Menus:</span>
+                </div>
+              )}
+              
+              {lunchMenus.length > 1 && (
+                <TabsList className="grid w-full grid-cols-2 h-auto mb-3">
+                  {lunchMenus.map(menu => (
+                    <TabsTrigger 
+                      key={menu.id} 
+                      value={menu.id}
+                      className="text-xs py-1 px-2"
+                    >
+                      {menu.name}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              )}
+              
+              {lunchMenus.map(menu => (
+                <TabsContent key={menu.id} value={menu.id} className="space-y-3 mt-0">
+                  {getLunchIncludes(menu.id) && (
+                    <div className="text-xs text-gray-500">
+                      <span className="font-medium">Includes:</span> {getLunchIncludes(menu.id)}
+                    </div>
+                  )}
+                  
+                  <div className="space-y-2">
+                    <div className="text-xs font-medium text-gray-500 mb-1">Popular dishes:</div>
+                    {menu.lunchMenuItems.slice(0, 2).map((item, i) => (
+                      <div key={i} className="flex justify-between text-sm">
+                        <div className="flex-1">
+                          <span className="font-medium text-gray-700">{item.name}</span>
+                          {item.tags && item.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-1 mt-1">
+                              {item.tags.slice(0, 2).map((tag, idx) => (
+                                <Badge key={idx} variant="outline" className="text-[10px] px-1 py-0 h-4">
+                                  {tag.name}
+                                </Badge>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                        <span className="text-gray-500 ml-2">{item.price} kr</span>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
+                </TabsContent>
+              ))}
+            </Tabs>
+          </div>
+        )}
         
         <Link
           to={`/restaurant/${id}`}

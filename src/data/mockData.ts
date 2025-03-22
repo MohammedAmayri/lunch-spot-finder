@@ -1,4 +1,3 @@
-
 export interface MenuItem {
   id: string;
   name: string;
@@ -53,7 +52,7 @@ export const restaurants: Restaurant[] = [
     rating: 4.2,
     priceLevel: 1,
     image: "/lovable-uploads/b92b18c1-d260-4631-94dd-77e401d774d6.png",
-    hours: "Mon-Fri: 11.30-15.00",
+    hours: "Mån-Fre: 11.30-15.00",
     coordinates: { lat: 56.0465, lng: 12.6945 },
     tags: ["Mediterranean", "Fast food", "Kebab"],
     menuItems: [
@@ -64,7 +63,7 @@ export const restaurants: Restaurant[] = [
         price: 119,
         image: "/lovable-uploads/b92b18c1-d260-4631-94dd-77e401d774d6.png",
         type: "Mediterranean",
-        tags: ["Meat", "Lunch special"],
+        tags: ["Meat", "Lunch special", "Coffee included", "Salad included"],
       },
       {
         id: "1-2",
@@ -72,7 +71,7 @@ export const restaurants: Restaurant[] = [
         description: "Crispy falafel with vegetables and tahini sauce.",
         price: 109,
         type: "Mediterranean",
-        tags: ["Vegetarian", "Lunch special"],
+        tags: ["Vegetarian", "Lunch special", "Coffee included"],
       }
     ]
   },
@@ -85,7 +84,7 @@ export const restaurants: Restaurant[] = [
     rating: 4.4,
     priceLevel: 2,
     image: "/lovable-uploads/2b997d73-8864-42c8-b802-2b9fae102614.png",
-    hours: "Mon-Fri: 11.30-15.00",
+    hours: "Mån-Fre: 11.30-15.00",
     coordinates: { lat: 56.0390, lng: 12.6963 },
     tags: ["International", "Seafood", "Asian fusion"],
     menuItems: [
@@ -96,7 +95,7 @@ export const restaurants: Restaurant[] = [
         price: 139,
         image: "/lovable-uploads/d17e11fa-ff15-4eb8-89b7-279feb816a8a.png",
         type: "Asian fusion",
-        tags: ["Soup", "Lunch special"],
+        tags: ["Soup", "Lunch special", "Coffee included", "Salad bar", "Dessert included"],
       },
       {
         id: "2-2",
@@ -104,7 +103,7 @@ export const restaurants: Restaurant[] = [
         description: "Fresh local fish with seasonal vegetables and potatoes.",
         price: 159,
         type: "Seafood",
-        tags: ["Seafood", "Lunch special"],
+        tags: ["Seafood", "Lunch special", "Coffee included", "Salad included"],
       }
     ]
   },
@@ -117,7 +116,7 @@ export const restaurants: Restaurant[] = [
     rating: 4.7,
     priceLevel: 2,
     image: "/lovable-uploads/c2cdbdc2-9f1e-4ec7-a20c-8ace633be697.png",
-    hours: "Mon-Fri: 11.30-15.00",
+    hours: "Mån-Fre: 11.30-15.00",
     coordinates: { lat: 56.0477, lng: 12.6923 },
     tags: ["Italian", "Pasta", "Mediterranean"],
     menuItems: [
@@ -148,7 +147,7 @@ export const restaurants: Restaurant[] = [
     rating: 4.6,
     priceLevel: 2,
     image: "/lovable-uploads/309fd144-3819-4e34-a69a-d6ede0b59cab.png",
-    hours: "Mon-Fri: 11.30-15.00",
+    hours: "Mån-Fre: 11.30-15.00",
     coordinates: { lat: 56.0443, lng: 12.6933 },
     tags: ["Vegetarian", "Vegan", "Healthy"],
     menuItems: [
@@ -179,7 +178,7 @@ export const restaurants: Restaurant[] = [
     rating: 4.8,
     priceLevel: 2,
     image: "/lovable-uploads/2b997d73-8864-42c8-b802-2b9fae102614.png",
-    hours: "Mon-Fri: 11.00-14.30",
+    hours: "Mån-Fre: 11.00-14.30",
     coordinates: { lat: 59.3326, lng: 18.0649 },
     phoneNumber: "08-123-4567",
     website: "https://stockholmlunch.se",
@@ -192,7 +191,7 @@ export const restaurants: Restaurant[] = [
         description: "Traditional Swedish meatballs with creamy sauce, lingonberry jam, and mashed potatoes.",
         price: 125,
         type: "Swedish",
-        tags: ["Meat", "Monday special"],
+        tags: ["Meat", "Monday special", "Coffee included", "Salad included", "Dessert included"],
       },
       {
         id: "5-2",
@@ -200,7 +199,7 @@ export const restaurants: Restaurant[] = [
         description: "Hearty vegetable lasagna with zucchini, eggplant, and spinach.",
         price: 115,
         type: "Italian",
-        tags: ["Vegetarian", "Monday special"],
+        tags: ["Vegetarian", "Monday special", "Coffee included", "Salad included"],
       },
       {
         id: "5-3",
@@ -208,7 +207,7 @@ export const restaurants: Restaurant[] = [
         description: "Creamy fish soup with salmon, cod, and shrimp, served with bread.",
         price: 135,
         type: "Seafood",
-        tags: ["Seafood", "Monday special"],
+        tags: ["Seafood", "Monday special", "Coffee included", "Salad included"],
       },
       // Tuesday Menu
       {
@@ -217,7 +216,7 @@ export const restaurants: Restaurant[] = [
         description: "Classic beef stroganoff with mushrooms and rice.",
         price: 129,
         type: "International",
-        tags: ["Meat", "Tuesday special"],
+        tags: ["Meat", "Tuesday special", "Coffee included", "Salad included"],
       },
       {
         id: "5-5",
@@ -225,7 +224,7 @@ export const restaurants: Restaurant[] = [
         description: "Mediterranean falafel bowl with hummus, tabbouleh, and pita bread.",
         price: 119,
         type: "Mediterranean",
-        tags: ["Vegetarian", "Vegan", "Tuesday special"],
+        tags: ["Vegetarian", "Vegan", "Tuesday special", "Coffee included", "Salad included"],
       },
       {
         id: "5-6",
@@ -233,7 +232,7 @@ export const restaurants: Restaurant[] = [
         description: "Perfectly grilled salmon with lemon-dill sauce and roasted vegetables.",
         price: 139,
         type: "Seafood",
-        tags: ["Seafood", "Tuesday special"],
+        tags: ["Seafood", "Tuesday special", "Coffee included", "Salad included"],
       },
       // Wednesday Menu
       {
@@ -242,7 +241,7 @@ export const restaurants: Restaurant[] = [
         description: "Aromatic chicken curry with basmati rice and cucumber raita.",
         price: 125,
         type: "Asian",
-        tags: ["Meat", "Wednesday special"],
+        tags: ["Meat", "Wednesday special", "Coffee included", "Salad included"],
       },
       {
         id: "5-8",
@@ -250,7 +249,7 @@ export const restaurants: Restaurant[] = [
         description: "Housemade vegetable and bean patty with all the fixings and sweet potato fries.",
         price: 129,
         type: "American",
-        tags: ["Vegetarian", "Wednesday special"],
+        tags: ["Vegetarian", "Wednesday special", "Coffee included", "Salad included"],
       },
       {
         id: "5-9",
@@ -258,7 +257,7 @@ export const restaurants: Restaurant[] = [
         description: "Garlic shrimp pasta with cherry tomatoes and fresh herbs.",
         price: 135,
         type: "Italian",
-        tags: ["Seafood", "Wednesday special"],
+        tags: ["Seafood", "Wednesday special", "Coffee included", "Salad included"],
       },
       // Thursday Menu
       {
@@ -267,7 +266,7 @@ export const restaurants: Restaurant[] = [
         description: "Slow-cooked pulled pork with BBQ sauce, coleslaw, and potato wedges.",
         price: 129,
         type: "American",
-        tags: ["Meat", "Thursday special"],
+        tags: ["Meat", "Thursday special", "Coffee included", "Salad included"],
       },
       {
         id: "5-11",
@@ -275,7 +274,7 @@ export const restaurants: Restaurant[] = [
         description: "Creamy mushroom risotto with truffle oil and parmesan cheese.",
         price: 119,
         type: "Italian",
-        tags: ["Vegetarian", "Thursday special"],
+        tags: ["Vegetarian", "Thursday special", "Coffee included", "Salad included"],
       },
       {
         id: "5-12",
@@ -283,7 +282,7 @@ export const restaurants: Restaurant[] = [
         description: "Crispy fish tacos with avocado, salsa, and lime crema.",
         price: 125,
         type: "Mexican",
-        tags: ["Seafood", "Thursday special"],
+        tags: ["Seafood", "Thursday special", "Coffee included", "Salad included"],
       },
       // Friday Menu
       {
@@ -292,7 +291,7 @@ export const restaurants: Restaurant[] = [
         description: "Juicy beef burger with bacon, cheese, and hand-cut fries.",
         price: 139,
         type: "American",
-        tags: ["Meat", "Friday special"],
+        tags: ["Meat", "Friday special", "Coffee included", "Salad included"],
       },
       {
         id: "5-14",
@@ -300,7 +299,7 @@ export const restaurants: Restaurant[] = [
         description: "Homemade pumpkin ravioli with sage butter and toasted pine nuts.",
         price: 129,
         type: "Italian",
-        tags: ["Vegetarian", "Friday special"],
+        tags: ["Vegetarian", "Friday special", "Coffee included", "Salad included"],
       },
       {
         id: "5-15",
@@ -308,7 +307,7 @@ export const restaurants: Restaurant[] = [
         description: "Selection of today's fresh seafood with aioli and lemon.",
         price: 149,
         type: "Seafood",
-        tags: ["Seafood", "Friday special"],
+        tags: ["Seafood", "Friday special", "Coffee included", "Salad included"],
       }
     ]
   }

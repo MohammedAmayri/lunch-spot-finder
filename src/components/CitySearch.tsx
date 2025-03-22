@@ -46,7 +46,7 @@ const CitySearch = () => {
   return (
     <div ref={searchRef} className="relative w-full max-w-xl">
       <form onSubmit={handleSubmit} className="relative">
-        <div className="search-input-container">
+        <div className="relative">
           <input
             ref={inputRef}
             type="text"
@@ -54,9 +54,9 @@ const CitySearch = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onFocus={() => setIsFocused(true)}
-            className="search-input"
+            className="w-full py-3 pl-12 pr-4 text-gray-700 bg-white rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-brand-300"
           />
-          <div className="search-icon">
+          <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-brand-500">
             <Search size={20} />
           </div>
         </div>

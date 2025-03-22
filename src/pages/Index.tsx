@@ -33,7 +33,7 @@ const Index = () => {
             >
               <div className="absolute inset-0 bg-brand-500 flex items-center justify-center overflow-hidden">
                 <motion.img 
-                  src="/lovable-uploads/1272cc83-d221-4945-bb25-1c93b65ccf2a.png" 
+                  src="/lovable-uploads/4338c79c-ab06-4d40-a3b9-a6dfa95def51.png" 
                   alt="Animated food illustration" 
                   className="w-full h-full object-cover object-center"
                   initial={{ opacity: 0 }}

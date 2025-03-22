@@ -1,249 +1,197 @@
 
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Coffee, Salad, Sandwich, ExternalLink } from 'lucide-react';
+import { Star, MapPin, Clock, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Restaurant, LunchMenuItem, Tag } from '../data/mockData';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
-import { useState } from "react";
+} from '@/components/ui/carousel';
+import { Restaurant } from '../data/mockData';
 
 interface RestaurantCardProps {
   restaurant: Restaurant;
   index: number;
 }
 
-// Helper to check if an item includes extras based on tags
-const hasExtra = (tags: Tag[], extraType: string): boolean => {
-  const extraMap: Record<string, string[]> = {
-    'coffee': ['Coffee included', 'Free coffee', 'Includes coffee'],
-    'salad': ['Salad included', 'Salad bar', 'Includes salad'],
-    'dessert': ['Dessert included', 'Includes dessert', 'Sweet']
+const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, index }) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
+  // Helper function to format price range
+  const formatPriceRange = () => {
+    let min = Infinity;
+    let max = 0;
+    
+    restaurant.lunchMenus.forEach(menu => {
+      menu.lunchMenuItems.forEach(item => {
+        if (item.price < min) min = item.price;
+        if (item.price > max) max = item.price;
+      });
+    });
+    
+    return `${min !== Infinity ? min : 0} - ${max} kr`;
   };
   
-  return tags.some(tag => extraMap[extraType]?.includes(tag.name));
-};
-
-// Random food placeholder images
-const placeholderImages = [
-  "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
-  "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8NXx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
-  "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTB8fHxlbnwwfHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
-  "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8N3x8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
-  "https://images.unsplash.com/photo-1529042410759-befb1204b468?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTV8fHxlbnwwfHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
-];
-
-// Get a random image from the placeholders array
-const getRandomPlaceholderImage = () => {
-  const randomIndex = Math.floor(Math.random() * placeholderImages.length);
-  return placeholderImages[randomIndex];
-};
-
-// Helper to remove day prefix from menu names
-const removeDayPrefix = (name: string): string => {
-  const dayPattern = /^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday): /i;
-  return name.replace(dayPattern, '');
-};
-
-const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, index }) => {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  // Extract restaurant details
+  const { id, name, rating, cuisines, location, hours, lunchMenus, images } = restaurant;
   
-  // Get lunch menu items from the restaurant's first lunch menu
-  const lunchMenuItems = restaurant.lunchMenus[0]?.lunchMenuItems || [];
-  const totalSlides = lunchMenuItems.length;
+  // Get current lunch hours if available
+  const lunchHours = hours.find(h => h.type === "LUNCH");
   
-  // Get location data
-  const address = restaurant.location?.address || '';
-  const city = restaurant.location?.city || '';
+  // Get main image and all item images
+  const mainImage = images[0]?.url || '/placeholder.svg';
   
-  // Get hours string representation
-  const hoursText = restaurant.hours.length > 0 ? 
-    `${restaurant.hours[0].startTime} - ${restaurant.hours[0].endTime}` : 
-    'Hours not available';
+  // Collect all menu item images
+  const allImages = [mainImage];
+  lunchMenus.forEach(menu => {
+    menu.lunchMenuItems.forEach(item => {
+      if (item.images && item.images.length > 0) {
+        allImages.push(item.images[0].url);
+      }
+    });
+  });
+  
+  // Limit to 5 images max
+  const cardImages = allImages.slice(0, 5);
+  
+  // Get popular menu items (up to 2)
+  const popularItems = lunchMenus.flatMap(menu => menu.lunchMenuItems).slice(0, 2);
+  
+  // Helper to get lunch includes as string
+  const getLunchIncludes = () => {
+    const allIncludes = new Set<string>();
+    
+    lunchMenus.forEach(menu => {
+      menu.lunchIncludes.forEach(item => {
+        allIncludes.add(item.name);
+      });
+    });
+    
+    return Array.from(allIncludes).join(', ');
+  };
+
+  // Animation variants for staggered children
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+        delayChildren: index * 0.1,
+      }
+    }
+  };
+  
+  const handleCarouselChange = useCallback((api: any) => {
+    if (!api) return;
+    setCurrentImageIndex(api.selectedScrollSnap());
+  }, []);
   
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: 0.4,
-        delay: index * 0.1,
-        ease: [0.43, 0.13, 0.23, 0.96]
-      }}
-      className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden h-full flex flex-col"
     >
-      <div className="p-4">
-        {/* Restaurant Header */}
-        <div className="flex justify-between items-start mb-4">
-          <div>
-            <h3 className="text-2xl font-bold text-gray-900">{restaurant.name}</h3>
-            <div className="flex items-center text-sm text-gray-500 mt-1">
-              <MapPin size={14} className="mr-1 text-gray-400" />
-              <span>{address}, {city}</span>
-            </div>
+      <div className="relative">
+        <Carousel className="w-full" onApiChange={handleCarouselChange}>
+          <CarouselContent>
+            {cardImages.map((image, i) => (
+              <CarouselItem key={i}>
+                <div className="h-48 overflow-hidden">
+                  <img 
+                    src={image} 
+                    alt={name} 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="h-8 w-8 left-2" />
+          <CarouselNext className="h-8 w-8 right-2" />
+        </Carousel>
+        
+        {cardImages.length > 1 && (
+          <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1">
+            {cardImages.map((_, i) => (
+              <div
+                key={i}
+                className={`h-1.5 rounded-full ${
+                  currentImageIndex === i ? 'w-4 bg-white' : 'w-1.5 bg-white/60'
+                } transition-all duration-300 ease-in-out`}
+              />
+            ))}
           </div>
-          <a 
-            href={`https://maps.google.com/?q=${address},${city}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-emerald-500 text-white rounded-lg px-4 py-2 text-sm font-medium flex items-center"
-          >
-            <MapPin size={16} className="mr-1" />
-            Karta
-          </a>
+        )}
+      </div>
+      
+      <div className="p-4 flex-1 flex flex-col">
+        <div className="mb-2 flex justify-between items-start">
+          <h3 className="text-lg font-semibold text-gray-900">{name}</h3>
+          <div className="flex items-center px-2 py-1 bg-green-50 rounded-full">
+            <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400 mr-1" />
+            <span className="text-xs font-medium text-gray-900">{rating.toFixed(1)}</span>
+          </div>
         </div>
         
-        {/* Menu Carousel */}
-        <div className="relative">
-          {/* Carousel Title */}
-          <div className="flex justify-between items-center mb-2">
-            <h4 className="text-lg font-medium text-gray-700">
-              Today's Lunch Menu ({currentSlide + 1}/{totalSlides})
-            </h4>
-            
-            {/* Slide Indicators */}
-            <div className="flex gap-1">
-              {Array.from({ length: totalSlides }).map((_, i) => (
-                <div 
-                  key={i} 
-                  className={`h-2 w-2 rounded-full transition-all ${i === currentSlide ? 'bg-brand-500 w-4' : 'bg-gray-300'}`}
-                />
-              ))}
-            </div>
+        <div className="flex flex-wrap gap-1 mb-3">
+          {cuisines.map((cuisine, i) => (
+            <span key={i} className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
+              {cuisine.name}
+            </span>
+          ))}
+        </div>
+        
+        {location && (
+          <div className="flex items-center text-sm text-gray-500 mb-1">
+            <MapPin className="h-3.5 w-3.5 mr-1 text-gray-400" />
+            <span className="truncate">{location.address}</span>
+          </div>
+        )}
+        
+        {lunchHours && (
+          <div className="flex items-center text-sm text-gray-500 mb-3">
+            <Clock className="h-3.5 w-3.5 mr-1 text-gray-400" />
+            <span>{lunchHours.startTime} - {lunchHours.endTime}</span>
+          </div>
+        )}
+        
+        <div className="mt-auto space-y-3">
+          <div className="text-xs text-gray-500">
+            <span className="font-medium">Price range:</span> {formatPriceRange()}
           </div>
           
-          <Carousel
-            opts={{ loop: true }}
-            className="w-full"
-            onSelect={(api) => {
-              if (api) {
-                // Fix: Use the carousel API correctly
-                setCurrentSlide(api.selectedScrollSnap());
-              }
-            }}
-          >
-            <CarouselContent className="-ml-2 md:-ml-4">
-              {lunchMenuItems.map((item: LunchMenuItem, i: number) => (
-                <CarouselItem key={item.id} className="pl-2 md:pl-4 basis-full md:basis-1/1 lg:basis-1/1">
-                  <div className="bg-gray-50 rounded-xl overflow-hidden relative">
-                    <div className="relative h-64 w-full">
-                      <img 
-                        src={(item.images && item.images.length > 0) ? item.images[0].url : getRandomPlaceholderImage()} 
-                        alt={item.name} 
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                    </div>
-                    <div className="p-5">
-                      <div className="flex flex-col">
-                        <div className="flex justify-between items-center mb-2">
-                          <h4 
-                            className="text-2xl font-bold text-gray-900 truncate max-w-[70%]" 
-                            title={removeDayPrefix(item.name)}
-                          >
-                            {removeDayPrefix(item.name)}
-                          </h4>
-                          <span className="text-xl font-bold text-gray-900">{Number(item.price)} kr</span>
-                        </div>
-                        
-                        <div className="flex justify-between items-center">
-                          {/* Opening Hours */}
-                          <div className="text-base text-gray-600">
-                            {hoursText}
-                          </div>
-                          
-                          {/* Included Items */}
-                          <div className="flex items-center space-x-4">
-                            <TooltipProvider>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <div className={cn(
-                                    "p-1.5", 
-                                    hasExtra(item.tags, 'coffee') 
-                                      ? "text-gray-800" 
-                                      : "text-gray-300"
-                                  )}>
-                                    <Coffee size={24} />
-                                  </div>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>{hasExtra(item.tags, 'coffee') 
-                                    ? "Coffee included" 
-                                    : "Coffee not included"}</p>
-                                </TooltipContent>
-                              </Tooltip>
-                              
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <div className={cn(
-                                    "p-1.5", 
-                                    hasExtra(item.tags, 'salad') 
-                                      ? "text-gray-800" 
-                                      : "text-gray-300"
-                                  )}>
-                                    <Salad size={24} />
-                                  </div>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>{hasExtra(item.tags, 'salad') 
-                                    ? "Salad included" 
-                                    : "Salad not included"}</p>
-                                </TooltipContent>
-                              </Tooltip>
-                              
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <div className={cn(
-                                    "p-1.5", 
-                                    hasExtra(item.tags, 'dessert') 
-                                      ? "text-gray-800" 
-                                      : "text-gray-300"
-                                  )}>
-                                    <Sandwich size={24} className="rotate-45" />
-                                  </div>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>{hasExtra(item.tags, 'dessert') 
-                                    ? "Dessert included" 
-                                    : "Dessert not included"}</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            
-            <div className="sm:block mt-2">
-              <CarouselPrevious className="-left-3 h-8 w-8" />
-              <CarouselNext className="-right-3 h-8 w-8" />
+          {getLunchIncludes() && (
+            <div className="text-xs text-gray-500">
+              <span className="font-medium">Includes:</span> {getLunchIncludes()}
             </div>
-          </Carousel>
+          )}
+          
+          {popularItems.length > 0 && (
+            <div className="border-t border-gray-100 pt-3 mt-3">
+              <p className="text-xs font-medium text-gray-500 mb-2">Popular dishes:</p>
+              <div className="space-y-2">
+                {popularItems.map((item, i) => (
+                  <div key={i} className="flex justify-between text-sm">
+                    <span className="font-medium text-gray-700">{item.name}</span>
+                    <span className="text-gray-500">{item.price} kr</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
         
-        {/* Link to Restaurant Detail */}
-        <Link 
-          to={`/restaurant/${restaurant.id}`}
-          className="mt-4 text-sm text-brand-600 font-medium flex items-center hover:underline"
+        <Link
+          to={`/restaurant/${id}`}
+          className="mt-4 flex items-center justify-center py-2 px-4 rounded-lg bg-brand-500 hover:bg-brand-600 text-white text-sm font-medium transition-colors"
         >
-          <span>View details</span>
-          <ExternalLink size={14} className="ml-1" />
+          View menu <ArrowRight className="ml-1 h-4 w-4" />
         </Link>
       </div>
     </motion.div>

@@ -786,3 +786,15 @@ export const restaurants: Restaurant[] = [
     ]
   }
 ];
+
+// Helper function to get restaurants by city
+export const getRestaurantsByCity = (city: string): Restaurant[] => {
+  return restaurants.filter(restaurant => 
+    restaurant.location?.city.toLowerCase() === city.toLowerCase()
+  );
+};
+
+// Helper function to get restaurant by id
+export const getRestaurantById = (id: string): Restaurant | undefined => {
+  return restaurants.find(restaurant => restaurant.id === id);
+};

@@ -18,7 +18,7 @@ const Header = () => {
     <header className={`w-full py-4 px-6 absolute top-0 left-0 z-50`}>
       <div className="flex justify-between items-center max-w-7xl mx-auto">
         <Link to="/" className="flex items-center space-x-2">
-          <div className="text-brand-500 flex items-center">
+          <div className="text-brand-500 md:text-white flex items-center">
             <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M3 6H21M3 12H21M3 18H21" 
                 stroke="currentColor" 
@@ -34,7 +34,7 @@ const Header = () => {
                 transform="rotate(-45 12 12)" />
             </svg>
           </div>
-          <span className="font-bold text-xl text-brand-500">
+          <span className="font-bold text-xl text-brand-500 md:text-white">
             Lunch Kompis
           </span>
         </Link>
@@ -44,7 +44,7 @@ const Header = () => {
         </nav>
         
         <button
-          className="md:hidden text-brand-500"
+          className="md:hidden text-brand-500 md:text-white"
           onClick={toggleMenu}
           aria-label="Toggle menu"
         >
@@ -92,8 +92,7 @@ const NavLinks: React.FC<NavLinksProps> = ({ isMobile, closeMenu }) => {
           key={link.path}
           to={link.path}
           className={`
-            ${isMobile ? 'block py-2 text-brand-600' : ''}
-            text-brand-500 hover:text-brand-700
+            ${isMobile ? 'block py-2 text-brand-600' : 'text-white hover:text-brand-100'}
             font-medium transition-all duration-200
             ${location.pathname === link.path ? 'font-bold' : ''}
           `}

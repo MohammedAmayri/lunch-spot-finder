@@ -20,7 +20,7 @@ const Header = () => {
         <Link to="/" className="flex items-center space-x-2">
           <div className="text-brand-500 flex items-center">
             <img 
-              src="/lovable-uploads/309fd144-3819-4e34-a69a-d6ede0b59cab.png" 
+              src="/lovable-uploads/6bdce325-379c-414d-88c9-b6a02de7aba3.png" 
               alt="Lunch Kompis Logo" 
               className="w-6 h-6"
             />

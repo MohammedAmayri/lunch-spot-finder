@@ -54,7 +54,7 @@ const CitySearch = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onFocus={() => setIsFocused(true)}
-            className="w-full py-3 px-12 text-gray-700 bg-white rounded-full shadow-md border border-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-200"
+            className="w-full py-3 pl-12 pr-4 text-gray-700 bg-white rounded-full shadow-md border border-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-100"
           />
           <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-brand-500">
             <Search size={20} />

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
@@ -19,12 +18,11 @@ const Header = () => {
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/" className="flex items-center space-x-2">
           <div className="text-brand-500 flex items-center">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M7 21L7 3" stroke="#00A67E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M17 21L17 3" stroke="#00A67E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M3 7L21 7" stroke="#00A67E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M3 17L21 17" stroke="#00A67E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+            <img 
+              src="/lovable-uploads/d17e11fa-ff15-4eb8-89b7-279feb816a8a.png" 
+              alt="Lunch Kompis Logo" 
+              className="w-6 h-6"
+            />
           </div>
           <span className="font-bold text-xl text-brand-500">
             Lunch Kompis

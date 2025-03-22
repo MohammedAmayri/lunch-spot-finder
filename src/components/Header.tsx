@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
@@ -19,7 +20,7 @@ const Header = () => {
         <Link to="/" className="flex items-center space-x-2">
           <div className="text-brand-500 flex items-center">
             <img 
-              src="/lovable-uploads/d17e11fa-ff15-4eb8-89b7-279feb816a8a.png" 
+              src="/lovable-uploads/309fd144-3819-4e34-a69a-d6ede0b59cab.png" 
               alt="Lunch Kompis Logo" 
               className="w-6 h-6"
             />

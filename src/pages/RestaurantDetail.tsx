@@ -27,6 +27,31 @@ const RestaurantDetail = () => {
   if (!restaurant) {
     return null;
   }
+
+  // Get the restaurant's first lunch menu and its items
+  const lunchMenu = restaurant.lunchMenus.length > 0 ? restaurant.lunchMenus[0] : null;
+  const lunchMenuItems = lunchMenu?.lunchMenuItems || [];
+  const lunchIncludes = lunchMenu?.lunchIncludes || [];
+  
+  // Get location and contact information
+  const address = restaurant.location?.address || '';
+  const city = restaurant.location?.city || '';
+  const website = restaurant.contact?.website || '';
+  const phone = restaurant.contact?.phone || '';
+  
+  // Format hours string
+  const hoursText = restaurant.hours.length > 0 ? 
+    `${restaurant.hours[0].startTime} - ${restaurant.hours[0].endTime}` : 
+    'Hours not available';
+  
+  // Get cuisine and feature tags
+  const tags = [
+    ...restaurant.cuisines.map(c => c.name),
+    ...restaurant.features.map(f => f.name)
+  ];
+  
+  // Get restaurant main image
+  const mainImage = restaurant.images.length > 0 ? restaurant.images[0].url : '';
   
   const handleShare = () => {
     if (navigator.share) {
@@ -96,7 +121,7 @@ const RestaurantDetail = () => {
           <div className="lg:col-span-2">
             <div className="relative rounded-xl overflow-hidden h-64 md:h-80 mb-6">
               <img 
-                src={restaurant.image} 
+                src={mainImage} 
                 alt={restaurant.name} 
                 className="w-full h-full object-cover"
               />
@@ -109,7 +134,7 @@ const RestaurantDetail = () => {
                 >
                   <h1 className="text-3xl font-bold text-white mb-2">{restaurant.name}</h1>
                   <div className="flex flex-wrap gap-2">
-                    {restaurant.tags.map((tag, index) => (
+                    {tags.map((tag, index) => (
                       <span 
                         key={index} 
                         className="px-2 py-1 bg-white/10 backdrop-blur-sm text-white text-sm rounded-full"
@@ -126,30 +151,32 @@ const RestaurantDetail = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <h2 className="text-xl font-bold text-gray-900 mb-4">About</h2>
-                  <p className="text-gray-600 mb-4">{restaurant.description}</p>
+                  <p className="text-gray-600 mb-4">
+                    {`${restaurant.name} offers a delicious selection of foods in ${city}.`}
+                  </p>
                   
                   <div className="space-y-3">
                     <div className="flex items-start">
                       <MapPin size={18} className="text-brand-500 mt-0.5 mr-2 flex-shrink-0" />
-                      <span className="text-gray-700">{restaurant.address}, {restaurant.city}</span>
+                      <span className="text-gray-700">{address}, {city}</span>
                     </div>
                     <div className="flex items-start">
                       <Clock size={18} className="text-brand-500 mt-0.5 mr-2 flex-shrink-0" />
-                      <span className="text-gray-700">{restaurant.hours}</span>
+                      <span className="text-gray-700">{hoursText}</span>
                     </div>
-                    {restaurant.phoneNumber && (
+                    {phone && (
                       <div className="flex items-start">
                         <Phone size={18} className="text-brand-500 mt-0.5 mr-2 flex-shrink-0" />
-                        <a href={`tel:${restaurant.phoneNumber}`} className="text-brand-600 hover:underline">
-                          {restaurant.phoneNumber}
+                        <a href={`tel:${phone}`} className="text-brand-600 hover:underline">
+                          {phone}
                         </a>
                       </div>
                     )}
-                    {restaurant.website && (
+                    {website && (
                       <div className="flex items-start">
                         <Globe size={18} className="text-brand-500 mt-0.5 mr-2 flex-shrink-0" />
-                        <a href={restaurant.website} target="_blank" rel="noopener noreferrer" className="text-brand-600 hover:underline">
-                          {restaurant.website.replace(/^https?:\/\//, '')}
+                        <a href={website} target="_blank" rel="noopener noreferrer" className="text-brand-600 hover:underline">
+                          {website.replace(/^https?:\/\//, '')}
                         </a>
                       </div>
                     )}
@@ -163,7 +190,7 @@ const RestaurantDetail = () => {
             </div>
             
             <div className="bg-white rounded-xl p-6 shadow-sm">
-              <MenuList menuItems={restaurant.menuItems} />
+              <MenuList lunchMenuItems={lunchMenuItems} lunchIncludes={lunchIncludes} />
             </div>
           </div>
           
@@ -172,13 +199,6 @@ const RestaurantDetail = () => {
               <h2 className="text-xl font-bold text-gray-900 mb-4">At a glance</h2>
               
               <div className="space-y-4">
-                <div>
-                  <p className="text-gray-500 text-sm">Price range</p>
-                  <p className="font-medium text-gray-900">
-                    {Array(restaurant.priceLevel).fill('$').join('')}
-                  </p>
-                </div>
-                
                 <div>
                   <p className="text-gray-500 text-sm">Rating</p>
                   <div className="flex items-center">
@@ -206,23 +226,37 @@ const RestaurantDetail = () => {
                 <div>
                   <p className="text-gray-500 text-sm">Popular menu items</p>
                   <ul className="mt-1 space-y-1">
-                    {restaurant.menuItems.map((item, index) => (
+                    {restaurant.popularDishes.map((item, index) => (
                       <li key={index} className="text-gray-700">
-                        {item.name}
+                        {item}
                       </li>
                     ))}
                   </ul>
                 </div>
                 
                 <div>
-                  <p className="text-gray-500 text-sm">Tags</p>
+                  <p className="text-gray-500 text-sm">Features</p>
                   <div className="flex flex-wrap gap-1 mt-1">
-                    {restaurant.tags.map((tag, index) => (
+                    {restaurant.features.map((feature, index) => (
                       <span 
                         key={index} 
                         className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded-full"
                       >
-                        {tag}
+                        {feature.name}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                
+                <div>
+                  <p className="text-gray-500 text-sm">Cuisines</p>
+                  <div className="flex flex-wrap gap-1 mt-1">
+                    {restaurant.cuisines.map((cuisine, index) => (
+                      <span 
+                        key={index} 
+                        className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded-full"
+                      >
+                        {cuisine.name}
                       </span>
                     ))}
                   </div>

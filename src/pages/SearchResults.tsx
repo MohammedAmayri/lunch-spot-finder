@@ -34,20 +34,15 @@ const SearchResults = () => {
       return false;
     }
     
-    // Filter by price level
-    if (priceFilters.length > 0 && !priceFilters.includes(restaurant.priceLevel)) {
-      return false;
-    }
-    
     // Filter by rating
     if (ratingFilter && restaurant.rating < ratingFilter) {
       return false;
     }
     
-    // Filter by meal types
+    // Filter by meal types (using cuisines as proxy)
     if (typeFilters.length > 0) {
-      const hasMatchingType = restaurant.tags.some(tag => 
-        typeFilters.includes(tag)
+      const hasMatchingType = restaurant.cuisines.some(cuisine => 
+        typeFilters.includes(cuisine.name)
       );
       if (!hasMatchingType) {
         return false;

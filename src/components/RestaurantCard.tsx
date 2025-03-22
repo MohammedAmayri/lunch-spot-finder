@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Coffee, Salad, Sandwich, ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Restaurant } from '../data/mockData';
+import { Restaurant, LunchMenuItem, Tag } from '../data/mockData';
 import {
   Carousel,
   CarouselContent,
@@ -26,14 +26,14 @@ interface RestaurantCardProps {
 }
 
 // Helper to check if an item includes extras based on tags
-const hasExtra = (tags: string[], extraType: string): boolean => {
+const hasExtra = (tags: Tag[], extraType: string): boolean => {
   const extraMap: Record<string, string[]> = {
     'coffee': ['Coffee included', 'Free coffee', 'Includes coffee'],
     'salad': ['Salad included', 'Salad bar', 'Includes salad'],
     'dessert': ['Dessert included', 'Includes dessert', 'Sweet']
   };
   
-  return tags.some(tag => extraMap[extraType]?.includes(tag));
+  return tags.some(tag => extraMap[extraType]?.includes(tag.name));
 };
 
 // Random food placeholder images
@@ -59,7 +59,19 @@ const removeDayPrefix = (name: string): string => {
 
 const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, index }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const totalSlides = restaurant.menuItems.length;
+  
+  // Get lunch menu items from the restaurant's first lunch menu
+  const lunchMenuItems = restaurant.lunchMenus[0]?.lunchMenuItems || [];
+  const totalSlides = lunchMenuItems.length;
+  
+  // Get location data
+  const address = restaurant.location?.address || '';
+  const city = restaurant.location?.city || '';
+  
+  // Get hours string representation
+  const hoursText = restaurant.hours.length > 0 ? 
+    `${restaurant.hours[0].startTime} - ${restaurant.hours[0].endTime}` : 
+    'Hours not available';
   
   return (
     <motion.div
@@ -79,11 +91,11 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, index }) =>
             <h3 className="text-2xl font-bold text-gray-900">{restaurant.name}</h3>
             <div className="flex items-center text-sm text-gray-500 mt-1">
               <MapPin size={14} className="mr-1 text-gray-400" />
-              <span>{restaurant.address}, {restaurant.city}</span>
+              <span>{address}, {city}</span>
             </div>
           </div>
           <a 
-            href={`https://maps.google.com/?q=${restaurant.address},${restaurant.city}`}
+            href={`https://maps.google.com/?q=${address},${city}`}
             target="_blank"
             rel="noopener noreferrer"
             className="bg-emerald-500 text-white rounded-lg px-4 py-2 text-sm font-medium flex items-center"
@@ -122,12 +134,12 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, index }) =>
             }}
           >
             <CarouselContent className="-ml-2 md:-ml-4">
-              {restaurant.menuItems.map((item, i) => (
+              {lunchMenuItems.map((item: LunchMenuItem, i: number) => (
                 <CarouselItem key={item.id} className="pl-2 md:pl-4 basis-full md:basis-1/1 lg:basis-1/1">
                   <div className="bg-gray-50 rounded-xl overflow-hidden relative">
                     <div className="relative h-64 w-full">
                       <img 
-                        src={item.image || getRandomPlaceholderImage()} 
+                        src={(item.images && item.images.length > 0) ? item.images[0].url : getRandomPlaceholderImage()} 
                         alt={item.name} 
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -142,13 +154,13 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, index }) =>
                           >
                             {removeDayPrefix(item.name)}
                           </h4>
-                          <span className="text-xl font-bold text-gray-900">{item.price} kr</span>
+                          <span className="text-xl font-bold text-gray-900">{Number(item.price)} kr</span>
                         </div>
                         
                         <div className="flex justify-between items-center">
                           {/* Opening Hours */}
                           <div className="text-base text-gray-600">
-                            {restaurant.hours}
+                            {hoursText}
                           </div>
                           
                           {/* Included Items */}

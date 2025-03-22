@@ -1,4 +1,3 @@
-
 export interface LunchInclude {
   id: string;
   name: string;
@@ -157,17 +156,7 @@ const commonFeatures: Feature[] = [
 ];
 
 // Common cuisines
-const commonCuisines: Cuisine[] = [
-  { id: "c1", name: "Swedish" },
-  { id: "c2", name: "Italian" },
-  { id: "c3", name: "Asian" },
-  { id: "c4", name: "Mediterranean" },
-  { id: "c5", name: "Mexican" },
-  { id: "c6", name: "Vegetarian" },
-  { id: "c7", name: "Indian" },
-  { id: "c8", name: "Japanese" },
-  { id: "c9", name: "American" },
-];
+export const commonCuisines = ["Italian", "Swedish", "Asian", "French", "American", "Vegetarian", "Vegan", "Seafood", "International", "Mexican"];
 
 export const restaurants: Restaurant[] = [
   {

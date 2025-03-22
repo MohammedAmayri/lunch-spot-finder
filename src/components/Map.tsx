@@ -54,19 +54,39 @@ const Map: React.FC<MapProps> = ({
     }
 
     try {
-      // Create the map instance
+      // Create the map instance with custom styling
       map.current = L.map(mapContainer.current, {
         center: [59.3293, 18.0686], // Stockholm coordinates by default
-        zoom: 12,
-        layers: [
-          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          })
-        ]
+        zoom: 13,
+        zoomControl: false, // We'll add our own zoom control in a better position
+        attributionControl: false, // We'll add our own attribution control with custom styling
       });
 
-      // Add zoom control
-      L.control.zoom({ position: 'topright' }).addTo(map.current);
+      // Add custom styled tile layer
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        opacity: 0.8,
+      }).addTo(map.current);
+      
+      // Add custom styled attribution
+      L.control.attribution({
+        position: 'bottomright',
+        prefix: '<a href="https://leafletjs.com" class="text-xs text-brand-600 hover:text-brand-700">Leaflet</a>'
+      }).addText('<a href="https://www.openstreetmap.org/copyright" class="text-xs text-gray-500 hover:text-gray-700">OpenStreetMap</a>').addTo(map.current);
+      
+      // Add zoom control with custom position
+      L.control.zoom({ 
+        position: 'topright',
+        zoomInTitle: 'Zoom in',
+        zoomOutTitle: 'Zoom out',
+      }).addTo(map.current);
+
+      // Apply custom CSS to the map for better integration with app design
+      const mapElement = mapContainer.current.querySelector('.leaflet-container');
+      if (mapElement) {
+        // Make map controls more subtle
+        mapElement.classList.add('rounded-lg', 'shadow-md', 'border', 'border-gray-200');
+      }
       
       setMapLoaded(true);
       setMapError(null);
@@ -80,6 +100,52 @@ const Map: React.FC<MapProps> = ({
   // Initialize map on component mount
   useEffect(() => {
     initializeMap();
+    
+    // Add custom CSS for Leaflet controls
+    const style = document.createElement('style');
+    style.textContent = `
+      .leaflet-control-zoom {
+        border: none !important;
+        margin: 12px !important;
+      }
+      .leaflet-control-zoom a {
+        background-color: white !important;
+        color: #555 !important;
+        border: 1px solid #e5e7eb !important;
+        width: 32px !important;
+        height: 32px !important;
+        line-height: 30px !important;
+        font-size: 16px !important;
+        border-radius: 6px !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
+        margin-bottom: 5px !important;
+      }
+      .leaflet-control-zoom a:hover {
+        background-color: #f9fafb !important;
+        color: #00A67E !important;
+      }
+      .leaflet-popup-content-wrapper {
+        border-radius: 8px !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+      }
+      .leaflet-popup-content {
+        margin: 12px !important;
+      }
+      .leaflet-container {
+        font-family: 'Outfit', sans-serif !important;
+        background-color: #f8fafc !important;
+      }
+      .leaflet-container a {
+        color: #00A67E !important;
+      }
+      .leaflet-tile {
+        filter: saturate(0.9) hue-rotate(10deg) brightness(1.02) !important;
+      }
+      .leaflet-attribution-flag {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(style);
     
     // Clean up on unmount
     return () => {
@@ -96,6 +162,9 @@ const Map: React.FC<MapProps> = ({
         }
         map.current = null;
       }
+      
+      // Remove custom styles
+      document.head.removeChild(style);
     };
   }, []);
 
@@ -118,22 +187,22 @@ const Map: React.FC<MapProps> = ({
       
       const { lat, lng } = restaurant.location.coordinates;
       
-      // Create custom marker icon
+      // Create custom marker icon with subtle branded styling
       const customIcon = L.divIcon({
         className: 'custom-marker-icon',
         html: `
           <div class="${selectedRestaurant?.id === restaurant.id 
-            ? 'bg-brand-500 text-white' 
-            : 'bg-white text-gray-700 border border-gray-200'} 
-            p-2 rounded-full shadow-md cursor-pointer transform transition-all duration-200 hover:scale-110">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            ? 'bg-brand-500 text-white shadow-lg transform scale-110' 
+            : 'bg-white text-gray-700 border border-gray-200 shadow-md'} 
+            p-2 rounded-full cursor-pointer transition-all duration-300 hover:scale-110 hover:shadow-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
               <circle cx="12" cy="10" r="3"></circle>
             </svg>
           </div>
         `,
-        iconSize: [30, 30],
-        iconAnchor: [15, 30]
+        iconSize: [28, 28],
+        iconAnchor: [14, 28]
       });
       
       // Create and add marker to map
@@ -147,14 +216,15 @@ const Map: React.FC<MapProps> = ({
         );
       });
       
-      // Create popup with restaurant info
+      // Create popup with restaurant info using a more subtle design
       const popup = L.popup({
         closeButton: false,
-        offset: [0, -15]
+        offset: [0, -15],
+        className: 'custom-popup',
       }).setContent(`
-        <div class="p-2">
-          <h3 class="font-bold">${restaurant.name}</h3>
-          <p class="text-sm">${restaurant.location.address || ''}</p>
+        <div class="p-1">
+          <h3 class="font-bold text-gray-900">${restaurant.name}</h3>
+          <p class="text-sm text-gray-600">${restaurant.location.address || ''}</p>
         </div>
       `);
       
@@ -182,7 +252,7 @@ const Map: React.FC<MapProps> = ({
       });
     }
     
-    // If a restaurant is selected, center on it
+    // If a restaurant is selected, center on it with animation
     if (selectedRestaurant?.location?.coordinates) {
       const { lat, lng } = selectedRestaurant.location.coordinates;
       map.current.setView([lat, lng], 14, {
@@ -194,9 +264,9 @@ const Map: React.FC<MapProps> = ({
   }, [restaurants, selectedRestaurant, mapLoaded]);
 
   return (
-    <div className="relative w-full h-full min-h-[250px]">
+    <div className="relative w-full h-full min-h-[250px] rounded-lg overflow-hidden border border-gray-100 shadow-sm">
       {mapError && (
-        <div className="absolute inset-0 bg-gray-50 p-4 flex flex-col items-center justify-center text-center z-10 rounded-lg">
+        <div className="absolute inset-0 bg-white p-4 flex flex-col items-center justify-center text-center z-10 rounded-lg">
           <p className="text-red-500 text-sm mb-2">{mapError}</p>
           <button 
             onClick={initializeMap}
@@ -211,7 +281,7 @@ const Map: React.FC<MapProps> = ({
       
       {/* Fallback for restaurant list if map fails to load */}
       {(!mapLoaded && !mapError) && (
-        <div className="absolute inset-0 bg-brand-50 flex flex-col items-center justify-center text-center z-10 rounded-lg">
+        <div className="absolute inset-0 bg-gray-50 flex flex-col items-center justify-center text-center z-10 rounded-lg">
           <p className="text-sm text-gray-600 mb-2">Loading map...</p>
           <div className="flex flex-wrap justify-center gap-2 mt-4">
             {restaurants.map(restaurant => (

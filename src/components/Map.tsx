@@ -68,11 +68,11 @@ const Map: React.FC<MapProps> = ({
         opacity: 0.8,
       }).addTo(map.current);
       
-      // Add custom styled attribution
+      // Add custom styled attribution - FIXED: changed how we set the attribution text
       L.control.attribution({
         position: 'bottomright',
-        prefix: '<a href="https://leafletjs.com" class="text-xs text-brand-600 hover:text-brand-700">Leaflet</a>'
-      }).addText('<a href="https://www.openstreetmap.org/copyright" class="text-xs text-gray-500 hover:text-gray-700">OpenStreetMap</a>').addTo(map.current);
+        prefix: '<a href="https://leafletjs.com" class="text-xs text-brand-600 hover:text-brand-700">Leaflet</a> | <a href="https://www.openstreetmap.org/copyright" class="text-xs text-gray-500 hover:text-gray-700">OpenStreetMap</a>'
+      }).addTo(map.current);
       
       // Add zoom control with custom position
       L.control.zoom({ 

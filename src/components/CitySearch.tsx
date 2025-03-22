@@ -44,37 +44,32 @@ const CitySearch = () => {
       );
   
   return (
-    <div ref={searchRef} className="relative w-full max-w-xl mx-auto">
+    <div ref={searchRef} className="relative w-full max-w-xl">
       <form onSubmit={handleSubmit} className="relative">
-        <input
-          ref={inputRef}
-          type="text"
-          placeholder="Search for a city..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          onFocus={() => setIsFocused(true)}
-          className="w-full py-4 pl-12 pr-4 text-lg rounded-full bg-white/90 
-                     backdrop-blur-md shadow-lg border border-white/20
-                     focus:outline-none focus:ring-2 focus:ring-brand-300
-                     transition-all duration-300"
-        />
-        <button
-          type="submit"
-          className="absolute left-4 top-1/2 transform -translate-y-1/2 text-brand-500"
-          aria-label="Search"
-        >
-          <Search size={20} />
-        </button>
+        <div className="search-input-container">
+          <input
+            ref={inputRef}
+            type="text"
+            placeholder="Kartområde"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onFocus={() => setIsFocused(true)}
+            className="search-input"
+          />
+          <div className="search-icon">
+            <Search size={20} />
+          </div>
+        </div>
       </form>
       
       <AnimatePresence>
         {isFocused && filteredCities.length > 0 && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="absolute z-10 w-full mt-2 bg-white rounded-lg shadow-xl overflow-hidden"
+            className="absolute z-10 w-full mt-2 bg-white rounded-lg shadow-lg overflow-hidden"
           >
             <div className="p-3">
               <h3 className="text-sm font-medium text-gray-500 mb-2 px-2">Suggestions</h3>
@@ -94,7 +89,7 @@ const CitySearch = () => {
                         handleSearch(city.name);
                       }}
                     >
-                      <div className="text-brand-400">
+                      <div className="text-brand-500">
                         {searchTerm.trim() === '' ? (
                           <Star size={16} className="text-gray-400" />
                         ) : (

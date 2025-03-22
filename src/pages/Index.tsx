@@ -1,60 +1,114 @@
 
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import CitySearch from '../components/CitySearch';
 import Header from '../components/Header';
-import { motion } from 'framer-motion';
+import { motion, useAnimation } from 'framer-motion';
 import { Check } from 'lucide-react';
 import AnimatedPage from '../components/AnimatedPage';
+import { useInView } from 'framer-motion';
 
 const Index = () => {
+  const controls = useAnimation();
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+
+  useEffect(() => {
+    if (isInView) {
+      controls.start('visible');
+    }
+  }, [isInView, controls]);
+
   return (
     <AnimatedPage className="min-h-screen">
-      <div className="relative min-h-screen bg-hero-pattern bg-cover bg-center">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60"></div>
-        
+      <div className="relative min-h-screen flex flex-col">
         <Header />
         
-        <div className="relative z-10 container mx-auto px-4 py-20 flex flex-col items-center justify-center min-h-screen">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="max-w-3xl mx-auto text-center mb-10"
-          >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
-              Find the perfect lunch spot
-            </h1>
-            <p className="text-xl text-white/90 mb-8 max-w-xl mx-auto">
-              Discover the best lunch options in your city, with menus, prices, and ratings.
-            </p>
-            
-            <CitySearch />
-          </motion.div>
+        <div className="flex-1 flex flex-col lg:flex-row">
+          {/* Left section - Food Image with Animation */}
+          <div className="w-full lg:w-1/2 bg-brand-500 flex items-center justify-center overflow-hidden relative h-[40vh] lg:h-auto">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8 }}
+              className="relative w-full h-full"
+            >
+              <div className="absolute inset-0 bg-brand-500 flex items-center justify-center overflow-hidden">
+                <motion.img 
+                  src="/lovable-uploads/1272cc83-d221-4945-bb25-1c93b65ccf2a.png" 
+                  alt="Animated food illustration" 
+                  className="w-full h-full object-cover object-center"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-600/20 to-transparent"></div>
+              </div>
+            </motion.div>
+          </div>
           
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl w-full"
-          >
-            {features.map((feature, index) => (
+          {/* Right section - Content */}
+          <div className="w-full lg:w-1/2 bg-white p-6 md:p-12 lg:p-16 flex flex-col justify-center">
+            <div 
+              ref={ref} 
+              className="max-w-xl mx-auto lg:mx-0"
+            >
               <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
-                className="glass-card p-6 rounded-lg text-white"
+                initial="hidden"
+                animate={controls}
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+                }}
               >
-                <div className="flex items-start mb-4">
-                  <div className="rounded-full bg-brand-500/20 p-2 mr-3">
-                    <Check className="h-5 w-5 text-brand-400" />
-                  </div>
-                  <h3 className="font-semibold text-lg">{feature.title}</h3>
-                </div>
-                <p className="text-white/80 text-sm">{feature.description}</p>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight font-display">
+                  Ha koll på den bästa lunchen!
+                </h1>
+                <p className="text-xl text-gray-600 mb-8">
+                  Sveriges enklaste lunchmeny 🇸🇪
+                </p>
               </motion.div>
-            ))}
-          </motion.div>
+              
+              <div className="mb-8">
+                <CitySearch />
+              </div>
+              
+              <motion.div
+                className="space-y-4 mt-6"
+                initial="hidden"
+                animate={controls}
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: {
+                    opacity: 1,
+                    transition: {
+                      staggerChildren: 0.2,
+                      delayChildren: 0.3,
+                    }
+                  }
+                }}
+              >
+                {features.map((feature, index) => (
+                  <motion.div
+                    key={index}
+                    variants={{
+                      hidden: { opacity: 0, y: 10 },
+                      visible: { 
+                        opacity: 1, 
+                        y: 0,
+                        transition: { duration: 0.4 }
+                      }
+                    }}
+                    className="flex items-start"
+                  >
+                    <div className="flex-shrink-0 mr-3">
+                      <Check className="h-5 w-5 text-brand-500" />
+                    </div>
+                    <p className="text-gray-700">{feature.description}</p>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
+          </div>
         </div>
       </div>
     </AnimatedPage>
@@ -64,15 +118,15 @@ const Index = () => {
 const features = [
   {
     title: "Filter by preferences",
-    description: "Find restaurants that match your dietary needs and price range."
+    description: "Filtrera efter dina preferenser"
   },
   {
     title: "Browse daily menus",
-    description: "See what's on the menu today at restaurants near you."
+    description: "Bläddra smidigt i alla menyer"
   },
   {
     title: "Save time & money",
-    description: "Compare prices and options to make the best lunch decision."
+    description: "Spara tid & pengar"
   }
 ];
 

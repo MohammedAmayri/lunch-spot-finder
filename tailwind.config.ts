@@ -77,6 +77,10 @@ export default {
                     900: '#002B23',
                 }
 			},
+			fontFamily: {
+				body: ["'Outfit'", 'sans-serif'],
+				display: ["'Poppins'", 'sans-serif'],
+			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',

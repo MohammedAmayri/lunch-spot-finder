@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Coffee, Salad, Sandwich, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
+import { MapPin, Coffee, Salad, Sandwich, ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Restaurant } from '../data/mockData';
 import {
@@ -18,7 +18,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 interface RestaurantCardProps {
   restaurant: Restaurant;
@@ -132,18 +132,6 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, index }) =>
                         className="w-full h-full object-cover"
                         loading="lazy"
                       />
-                      
-                      {/* Carousel Navigation Hints */}
-                      {totalSlides > 1 && (
-                        <>
-                          <div className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/70 rounded-full p-1 shadow-md">
-                            <ChevronLeft className="text-gray-800" size={20} />
-                          </div>
-                          <div className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/70 rounded-full p-1 shadow-md">
-                            <ChevronRight className="text-gray-800" size={20} />
-                          </div>
-                        </>
-                      )}
                     </div>
                     <div className="p-5">
                       <div className="flex flex-col">

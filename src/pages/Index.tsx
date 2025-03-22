@@ -2,10 +2,9 @@
 import React, { useRef, useEffect } from 'react';
 import CitySearch from '../components/CitySearch';
 import Header from '../components/Header';
-import { motion, useAnimation } from 'framer-motion';
+import { motion, useAnimation, useInView } from 'framer-motion';
 import { Check } from 'lucide-react';
 import AnimatedPage from '../components/AnimatedPage';
-import { useInView } from 'framer-motion';
 
 const Index = () => {
   const controls = useAnimation();

@@ -1,831 +1,354 @@
+import { StaticImageData } from "next/image";
 
-export interface LunchInclude {
-  id: string;
-  name: string;
-}
-
-export interface Allergen {
-  id: string;
-  name: string;
-  description?: string;
-}
-
-export interface Tag {
-  id: string;
-  name: string;
-}
-
-export interface Image {
-  id: string;
-  url: string;
-  createdAt: Date;
-  createdBy: string;
-}
-
-export interface LunchMenuItem {
-  id: string;
-  name: string;
-  description?: string;
-  price: number;
-  validFrom?: Date;
-  validTo?: Date;
-  images?: Image[];
-  allergens?: Allergen[];
-  tags: Tag[];
-  lunchMenuId: string;
-}
-
-export interface LunchMenu {
-  id: string;
-  name: string;
-  description?: string;
-  lunchLink?: string;
-  restaurantId: string;
-  hoursId: string;
-  lunchIncludes: LunchInclude[];
-  lunchMenuItems: LunchMenuItem[];
-}
-
-export interface Hours {
-  id: string;
-  days: string[];
-  startTime: string;
-  endTime: string;
-  type: "OPEN" | "LUNCH";
-  restaurantId: string;
-}
-
-export interface Contact {
-  id: string;
-  phone: string;
-  email?: string;
-  website?: string;
-  restaurantId: string;
-}
-
-export interface Location {
-  id: string;
-  coordinates: {
-    lat: number;
-    lng: number;
-  };
-  city: string;
-  address?: string;
-  street?: string;
-  postalCode?: string;
-  restaurantId: string;
-}
-
-export interface Feature {
-  id: string;
-  name: string;
-}
-
-export interface Cuisine {
-  id: string;
+// Define TypeScript interfaces for data structures
+export interface City {
+  id: number;
   name: string;
 }
 
 export interface Restaurant {
-  id: string;
+  id: number;
   name: string;
-  cuisines: Cuisine[];
-  location?: Location;
-  contact?: Contact;
-  hours: Hours[];
+  cityId: number;
+  cuisine: string;
   rating: number;
-  images: Image[];
-  popularDishes: string[];
-  reservationLinks: string[];
-  features: Feature[];
-  lunchMenus: LunchMenu[];
-  createdAt: Date;
-  updatedAt: Date;
+  imageUrl: string;
+  address: string;
+  openingHours: string;
+  priceRange: string;
+  menu: MenuItem[];
+  reviews: Review[];
+  images: string[];
 }
 
-export const popularCities = [
-  { id: "1", name: "Stockholm" },
-  { id: "2", name: "Gothenburg" },
-  { id: "3", name: "Malmö" },
-  { id: "4", name: "Uppsala" },
-  { id: "5", name: "Västerås" },
-  { id: "6", name: "Örebro" },
-  { id: "7", name: "Linköping" },
-  { id: "8", name: "Helsingborg" },
-  { id: "9", name: "Jönköping" },
-  { id: "10", name: "Norrköping" },
+export interface MenuItem {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+}
+
+export interface Review {
+  id: number;
+  restaurantId: number;
+  author: string;
+  rating: number;
+  comment: string;
+  date: string;
+}
+
+export interface User {
+  id: number;
+  username: string;
+  email: string;
+  profilePicture: string;
+  savedRestaurants: number[]; // Array of restaurant IDs
+  reviews: Review[];
+}
+
+// Constants
+export const PRICE_RANGES = ["Budget", "Mid-Range", "High-End"];
+export const CUISINES = [
+  "Italian",
+  "Chinese",
+  "Japanese",
+  "Mexican",
+  "Indian",
+  "Thai",
+  "American",
+  "Mediterranean",
+  "French",
+  "Swedish",
+  "Spanish",
+  "Greek",
+  "Lebanese",
+  "Vietnamese",
+  "Korean",
+  "Brazilian",
+  "Ethiopian",
+  "Moroccan",
+  "Turkish",
+  "Argentinian",
+  "Peruvian",
+  "Caribbean",
+  "German",
+  "Nigerian"
 ];
 
-// Common tags
-const commonTags: Tag[] = [
-  { id: "t1", name: "Vegetarian" },
-  { id: "t2", name: "Vegan" },
-  { id: "t3", name: "Gluten-free" },
-  { id: "t4", name: "Lunch special" },
-  { id: "t5", name: "Coffee included" },
-  { id: "t6", name: "Salad included" },
-  { id: "t7", name: "Dessert included" },
-  { id: "t8", name: "Meat" },
-  { id: "t9", name: "Seafood" },
-  { id: "t10", name: "Healthy" },
+// Export the commonCuisines array so it can be imported in FilterBar.tsx
+export const commonCuisines = [
+  "Italian",
+  "Chinese",
+  "Japanese",
+  "Mexican",
+  "Indian",
+  "Thai",
+  "American",
+  "Mediterranean",
+  "French",
+  "Swedish"
 ];
 
-// Common includes
-const commonIncludes: LunchInclude[] = [
-  { id: "i1", name: "Coffee" },
-  { id: "i2", name: "Salad" },
-  { id: "i3", name: "Bread" },
-  { id: "i4", name: "Dessert" },
-  { id: "i5", name: "Water" },
+// Mock data for popular cities
+export const popularCities: City[] = [
+  { id: 1, name: "Stockholm" },
+  { id: 2, name: "Gothenburg" },
+  { id: 3, name: "Malmö" },
+  { id: 4, name: "Uppsala" },
+  { id: 5, name: "Linköping" },
 ];
 
-// Common allergens
-const commonAllergens: Allergen[] = [
-  { id: "a1", name: "Gluten", description: "Contains wheat, rye, barley or oats" },
-  { id: "a2", name: "Lactose", description: "Contains milk products" },
-  { id: "a3", name: "Nuts", description: "Contains various nuts" },
-  { id: "a4", name: "Shellfish", description: "Contains shellfish" },
-];
-
-// Common features
-const commonFeatures: Feature[] = [
-  { id: "f1", name: "Outdoor seating" },
-  { id: "f2", name: "Accessible" },
-  { id: "f3", name: "Takes reservations" },
-  { id: "f4", name: "Free WiFi" },
-  { id: "f5", name: "Parking" },
-];
-
-// Common cuisines
-const commonCuisines: Cuisine[] = [
-  { id: "c1", name: "Swedish" },
-  { id: "c2", name: "Italian" },
-  { id: "c3", name: "Asian" },
-  { id: "c4", name: "Mediterranean" },
-  { id: "c5", name: "Mexican" },
-  { id: "c6", name: "Vegetarian" },
-  { id: "c7", name: "Indian" },
-  { id: "c8", name: "Japanese" },
-  { id: "c9", name: "American" },
-];
-
+// Mock data for restaurants
 export const restaurants: Restaurant[] = [
   {
-    id: "1",
-    name: "Kebab Kungen",
-    cuisines: [commonCuisines[3]],
+    id: 1,
+    name: "Pasta Perfetta",
+    cityId: 1,
+    cuisine: "Italian",
+    rating: 4.5,
+    imageUrl: "/lovable-uploads/e859951d-9f4f-453b-a81d-649349a6043b.jpg",
+    address: "Vasagatan 15, 111 20 Stockholm",
+    openingHours: "11:00 - 22:00",
+    priceRange: "Mid-Range",
+    menu: [
+      { id: 1, name: "Spaghetti Carbonara", description: "Classic carbonara with egg, pancetta, and parmesan", price: 165, category: "Pasta" },
+      { id: 2, name: "Margherita Pizza", description: "Simple pizza with tomato, mozzarella, and basil", price: 140, category: "Pizza" },
+      { id: 3, name: "Tiramisu", description: "Coffee-flavored Italian dessert", price: 85, category: "Dessert" },
+    ],
+    reviews: [
+      { id: 1, restaurantId: 1, author: "Erik", rating: 5, comment: "Best pasta in town!", date: "2024-07-01" },
+      { id: 2, restaurantId: 1, author: "Anna", rating: 4, comment: "Great atmosphere and tasty food.", date: "2024-06-15" },
+    ],
+    images: [
+      "/lovable-uploads/e859951d-9f4f-453b-a81d-649349a6043b.jpg",
+      "/lovable-uploads/e859951d-9f4f-453b-a81d-649349a6043b.jpg",
+      "/lovable-uploads/e859951d-9f4f-453b-a81d-649349a6043b.jpg",
+    ]
+  },
+  {
+    id: 2,
+    name: "Sushi Palace",
+    cityId: 1,
+    cuisine: "Japanese",
     rating: 4.2,
-    popularDishes: ["Kebab Meny", "Falafel Roll"],
-    reservationLinks: [],
-    features: [commonFeatures[0], commonFeatures[3]],
-    createdAt: new Date("2023-01-15"),
-    updatedAt: new Date("2023-06-10"),
+    imageUrl: "/lovable-uploads/49996553-e546-4965-81fb-1958a9a3859a.jpg",
+    address: "Drottninggatan 25, 111 51 Stockholm",
+    openingHours: "12:00 - 23:00",
+    priceRange: "High-End",
+    menu: [
+      { id: 4, name: "Salmon Nigiri", description: "Fresh salmon on sushi rice", price: 45, category: "Sushi" },
+      { id: 5, name: "Dragon Roll", description: "Eel, cucumber, and avocado roll", price: 180, category: "Rolls" },
+      { id: 6, name: "Mochi Ice Cream", description: "Japanese rice cake with ice cream filling", price: 60, category: "Dessert" },
+    ],
+    reviews: [
+      { id: 3, restaurantId: 2, author: "Linda", rating: 4, comment: "Excellent sushi, a bit pricey.", date: "2024-06-20" },
+      { id: 4, restaurantId: 2, author: "Peter", rating: 5, comment: "The best sushi I've ever had!", date: "2024-05-10" },
+    ],
     images: [
-      {
-        id: "img1",
-        url: "/lovable-uploads/b92b18c1-d260-4631-94dd-77e401d774d6.png",
-        createdAt: new Date("2023-01-15"),
-        createdBy: "user1",
-      }
-    ],
-    location: {
-      id: "loc1",
-      coordinates: { lat: 56.0465, lng: 12.6945 },
-      city: "Helsingborg",
-      address: "Storgatan 45",
-      restaurantId: "1",
-    },
-    contact: {
-      id: "con1",
-      phone: "042-123456",
-      website: "https://kebabkungen.se",
-      restaurantId: "1",
-    },
-    hours: [
-      {
-        id: "h1",
-        days: ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"],
-        startTime: "11:30",
-        endTime: "15:00",
-        type: "LUNCH",
-        restaurantId: "1",
-      }
-    ],
-    lunchMenus: [
-      {
-        id: "lm1",
-        name: "Lunch Menu",
-        restaurantId: "1",
-        hoursId: "h1",
-        lunchIncludes: [commonIncludes[0], commonIncludes[1]],
-        lunchMenuItems: [
-          {
-            id: "1-1",
-            name: "Kebab Meny",
-            description: "Freshly made kebab with vegetables in homemade bread.",
-            price: 119,
-            lunchMenuId: "lm1",
-            tags: [commonTags[7], commonTags[3], commonTags[4], commonTags[5]],
-            images: [
-              {
-                id: "img1-1",
-                url: "https://images.unsplash.com/photo-1633321702518-7feccafb94d5?q=80&w=3540&auto=format&fit=crop",
-                createdAt: new Date("2023-01-15"),
-                createdBy: "user1",
-              }
-            ],
-          },
-          {
-            id: "1-2",
-            name: "Falafel Roll",
-            description: "Crispy falafel with vegetables and tahini sauce.",
-            price: 109,
-            lunchMenuId: "lm1",
-            tags: [commonTags[0], commonTags[3], commonTags[4]],
-            images: [
-              {
-                id: "img1-2",
-                url: "https://images.unsplash.com/photo-1593001872095-7d5b3668fc03?q=80&w=3540&auto=format&fit=crop",
-                createdAt: new Date("2023-01-15"),
-                createdBy: "user1",
-              }
-            ],
-          }
-        ]
-      },
-      {
-        id: "lm1-2",
-        name: "Weekend Special",
-        restaurantId: "1",
-        hoursId: "h1",
-        lunchIncludes: [commonIncludes[0], commonIncludes[1], commonIncludes[3]],
-        lunchMenuItems: [
-          {
-            id: "1-3",
-            name: "Deluxe Kebab Platter",
-            description: "Premium mixed kebab with rice, salad, and special sauce.",
-            price: 159,
-            lunchMenuId: "lm1-2",
-            tags: [commonTags[7], commonTags[3], commonTags[4], commonTags[5], commonTags[6]],
-            allergens: [commonAllergens[0], commonAllergens[1]],
-            images: [
-              {
-                id: "img1-3",
-                url: "https://images.unsplash.com/photo-1529563021893-cc83c992d75d?q=80&w=3540&auto=format&fit=crop",
-                createdAt: new Date("2023-02-10"),
-                createdBy: "user1",
-              }
-            ],
-          }
-        ]
-      }
+      "/lovable-uploads/49996553-e546-4965-81fb-1958a9a3859a.jpg",
+      "/lovable-uploads/49996553-e546-4965-81fb-1958a9a3859a.jpg",
+      "/lovable-uploads/49996553-e546-4965-81fb-1958a9a3859a.jpg",
     ]
   },
   {
-    id: "2",
-    name: "Strandhuset",
-    cuisines: [commonCuisines[0], commonCuisines[8]],
-    rating: 4.4,
-    popularDishes: ["Gulashsoppa", "Catch of the Day"],
-    reservationLinks: ["https://bookatable.com/strandhuset"],
-    features: [commonFeatures[0], commonFeatures[2], commonFeatures[4]],
-    createdAt: new Date("2023-02-10"),
-    updatedAt: new Date("2023-07-15"),
+    id: 3,
+    name: "Taco Bar",
+    cityId: 2,
+    cuisine: "Mexican",
+    rating: 3.8,
+    imageUrl: "/lovable-uploads/69a99559-942d-4055-9499-9975525c9964.jpg",
+    address: "Avenyn 42, 411 36 Gothenburg",
+    openingHours: "11:00 - 24:00",
+    priceRange: "Budget",
+    menu: [
+      { id: 7, name: "Chicken Taco", description: "Taco with grilled chicken, salsa, and guacamole", price: 35, category: "Tacos" },
+      { id: 8, name: "Burrito", description: "Large burrito with rice, beans, and your choice of filling", price: 95, category: "Burritos" },
+      { id: 9, name: "Churros", description: "Fried dough pastries with cinnamon and sugar", price: 40, category: "Dessert" },
+    ],
+    reviews: [
+      { id: 5, restaurantId: 3, author: "Maria", rating: 4, comment: "Good for a quick and cheap meal.", date: "2024-04-01" },
+      { id: 6, restaurantId: 3, author: "Johan", rating: 3, comment: "The food is okay, nothing special.", date: "2024-03-15" },
+    ],
     images: [
-      {
-        id: "img2",
-        url: "/lovable-uploads/2b997d73-8864-42c8-b802-2b9fae102614.png",
-        createdAt: new Date("2023-02-10"),
-        createdBy: "user1",
-      }
-    ],
-    location: {
-      id: "loc2",
-      coordinates: { lat: 56.0390, lng: 12.6963 },
-      city: "Helsingborg",
-      address: "Hamnvägen 12",
-      restaurantId: "2",
-    },
-    contact: {
-      id: "con2",
-      phone: "042-654321",
-      website: "https://strandhuset.se",
-      restaurantId: "2",
-    },
-    hours: [
-      {
-        id: "h2",
-        days: ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"],
-        startTime: "11:30",
-        endTime: "15:00",
-        type: "LUNCH",
-        restaurantId: "2",
-      }
-    ],
-    lunchMenus: [
-      {
-        id: "lm2",
-        name: "Daily Lunch",
-        restaurantId: "2",
-        hoursId: "h2",
-        lunchIncludes: [commonIncludes[0], commonIncludes[1], commonIncludes[3]],
-        lunchMenuItems: [
-          {
-            id: "2-1",
-            name: "Gulashsoppa",
-            description: "Traditional goulash soup with tender beef and vegetables.",
-            price: 139,
-            lunchMenuId: "lm2",
-            tags: [commonTags[7], commonTags[3], commonTags[4], commonTags[5], commonTags[6]],
-            allergens: [commonAllergens[1]],
-            images: [
-              {
-                id: "img2-1",
-                url: "https://images.unsplash.com/photo-1547592166-23ac45744acd?q=80&w=3541&auto=format&fit=crop",
-                createdAt: new Date("2023-02-10"),
-                createdBy: "user1",
-              }
-            ],
-          },
-          {
-            id: "2-2",
-            name: "Catch of the Day",
-            description: "Fresh local fish with seasonal vegetables and potatoes.",
-            price: 159,
-            lunchMenuId: "lm2",
-            tags: [commonTags[8], commonTags[3], commonTags[4], commonTags[5]],
-            allergens: [commonAllergens[3]],
-            images: [
-              {
-                id: "img2-2",
-                url: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?q=80&w=3540&auto=format&fit=crop",
-                createdAt: new Date("2023-02-10"),
-                createdBy: "user1",
-              }
-            ],
-          }
-        ]
-      },
-      {
-        id: "lm2-2",
-        name: "Executive Menu",
-        restaurantId: "2",
-        hoursId: "h2",
-        lunchIncludes: [commonIncludes[0], commonIncludes[1], commonIncludes[2], commonIncludes[3], commonIncludes[4]],
-        lunchMenuItems: [
-          {
-            id: "2-3",
-            name: "Swedish Meatballs",
-            description: "Traditional Swedish meatballs with lingonberry, mashed potatoes and gravy.",
-            price: 169,
-            lunchMenuId: "lm2-2",
-            tags: [commonTags[7], commonTags[3], commonTags[4], commonTags[5], commonTags[6]],
-            allergens: [commonAllergens[0], commonAllergens[1]],
-            images: [
-              {
-                id: "img2-3",
-                url: "https://images.unsplash.com/photo-1515516969-d4008cc6241a?q=80&w=3540&auto=format&fit=crop",
-                createdAt: new Date("2023-03-15"),
-                createdBy: "user1",
-              }
-            ],
-          }
-        ]
-      }
+      "/lovable-uploads/69a99559-942d-4055-9499-9975525c9964.jpg",
+      "/lovable-uploads/69a99559-942d-4055-9499-9975525c9964.jpg",
+      "/lovable-uploads/69a99559-942d-4055-9499-9975525c9964.jpg",
     ]
   },
   {
-    id: "3",
-    name: "Pasta Paradiso",
-    cuisines: [commonCuisines[1]],
-    rating: 4.7,
-    popularDishes: ["Pasta Carbonara", "Margherita Pizza"],
-    reservationLinks: ["https://bookatable.com/pasta-paradiso"],
-    features: [commonFeatures[0], commonFeatures[2], commonFeatures[3]],
-    createdAt: new Date("2023-03-01"),
-    updatedAt: new Date("2023-08-10"),
+    id: 4,
+    name: "Indian Curry House",
+    cityId: 2,
+    cuisine: "Indian",
+    rating: 4.0,
+    imageUrl: "/lovable-uploads/953f7974-09a5-499d-99a3-448054984375.jpg",
+    address: "Andra Långgatan 12, 413 27 Gothenburg",
+    openingHours: "12:00 - 22:00",
+    priceRange: "Mid-Range",
+    menu: [
+      { id: 10, name: "Chicken Tikka Masala", description: "Creamy tomato-based curry with chicken", price: 155, category: "Curry" },
+      { id: 11, name: "Vegetable Samosa", description: "Fried pastry with spiced vegetable filling", price: 50, category: "Appetizer" },
+      { id: 12, name: "Gulab Jamun", description: "Sweet milk balls in rose-flavored syrup", price: 65, category: "Dessert" },
+    ],
+    reviews: [
+      { id: 7, restaurantId: 4, author: "Sara", rating: 5, comment: "Authentic Indian flavors!", date: "2024-02-01" },
+      { id: 8, restaurantId: 4, author: "David", rating: 3, comment: "The service was a bit slow.", date: "2024-01-15" },
+    ],
     images: [
-      {
-        id: "img3",
-        url: "/lovable-uploads/c2cdbdc2-9f1e-4ec7-a20c-8ace633be697.png",
-        createdAt: new Date("2023-03-01"),
-        createdBy: "user1",
-      }
-    ],
-    location: {
-      id: "loc3",
-      coordinates: { lat: 59.3293, lng: 18.0686 },
-      city: "Stockholm",
-      address: "Kungsgatan 25",
-      restaurantId: "3",
-    },
-    contact: {
-      id: "con3",
-      phone: "08-123456",
-      website: "https://pastaparadiso.se",
-      restaurantId: "3",
-    },
-    hours: [
-      {
-        id: "h3",
-        days: ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"],
-        startTime: "11:00",
-        endTime: "14:30",
-        type: "LUNCH",
-        restaurantId: "3",
-      }
-    ],
-    lunchMenus: [
-      {
-        id: "lm3",
-        name: "Lunch Specials",
-        restaurantId: "3",
-        hoursId: "h3",
-        lunchIncludes: [commonIncludes[0], commonIncludes[2]],
-        lunchMenuItems: [
-          {
-            id: "3-1",
-            name: "Pasta Carbonara",
-            description: "Creamy pasta with pancetta, egg, and parmesan cheese.",
-            price: 129,
-            lunchMenuId: "lm3",
-            tags: [commonTags[7], commonTags[3], commonTags[4]],
-            allergens: [commonAllergens[0], commonAllergens[1]],
-            images: [
-              {
-                id: "img3-1",
-                url: "https://images.unsplash.com/photo-1588013273468-315fd88ea34c?q=80&w=3540&auto=format&fit=crop",
-                createdAt: new Date("2023-03-01"),
-                createdBy: "user1",
-              }
-            ],
-          },
-          {
-            id: "3-2",
-            name: "Margherita Pizza",
-            description: "Classic pizza with tomato sauce, mozzarella, and fresh basil.",
-            price: 119,
-            lunchMenuId: "lm3",
-            tags: [commonTags[0], commonTags[3], commonTags[4]],
-            allergens: [commonAllergens[0], commonAllergens[1]],
-            images: [
-              {
-                id: "img3-2",
-                url: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?q=80&w=3540&auto=format&fit=crop",
-                createdAt: new Date("2023-03-01"),
-                createdBy: "user1",
-              }
-            ],
-          }
-        ]
-      },
-      {
-        id: "lm3-2",
-        name: "Chef's Selection",
-        restaurantId: "3",
-        hoursId: "h3",
-        lunchIncludes: [commonIncludes[0], commonIncludes[1], commonIncludes[2], commonIncludes[3]],
-        lunchMenuItems: [
-          {
-            id: "3-3",
-            name: "Risotto ai Funghi",
-            description: "Creamy risotto with wild mushrooms and truffle oil.",
-            price: 159,
-            lunchMenuId: "lm3-2",
-            tags: [commonTags[0], commonTags[3], commonTags[4], commonTags[5], commonTags[6]],
-            allergens: [commonAllergens[1]],
-            images: [
-              {
-                id: "img3-3",
-                url: "https://images.unsplash.com/photo-1623431103558-a3c337d5f340?q=80&w=3432&auto=format&fit=crop",
-                createdAt: new Date("2023-04-15"),
-                createdBy: "user1",
-              }
-            ],
-          },
-          {
-            id: "3-4",
-            name: "Osso Buco",
-            description: "Slow-cooked veal shank with gremolata and saffron risotto.",
-            price: 189,
-            lunchMenuId: "lm3-2",
-            tags: [commonTags[7], commonTags[3], commonTags[4], commonTags[5], commonTags[6]],
-            allergens: [commonAllergens[1]],
-            images: [
-              {
-                id: "img3-4",
-                url: "https://images.unsplash.com/photo-1544782331-9cc5c535a6f4?q=80&w=3474&auto=format&fit=crop",
-                createdAt: new Date("2023-04-15"),
-                createdBy: "user1",
-              }
-            ],
-          }
-        ]
-      }
+      "/lovable-uploads/953f7974-09a5-499d-99a3-448054984375.jpg",
+      "/lovable-uploads/953f7974-09a5-499d-99a3-448054984375.jpg",
+      "/lovable-uploads/953f7974-09a5-499d-99a3-448054984375.jpg",
     ]
   },
   {
-    id: "4",
-    name: "Sushi Wave",
-    cuisines: [commonCuisines[2], commonCuisines[7]],
-    rating: 4.6,
-    popularDishes: ["Salmon Nigiri", "Dragon Roll"],
-    reservationLinks: ["https://bookatable.com/sushi-wave"],
-    features: [commonFeatures[2], commonFeatures[3]],
-    createdAt: new Date("2023-04-05"),
-    updatedAt: new Date("2023-09-20"),
-    images: [
-      {
-        id: "img4",
-        url: "/lovable-uploads/d17e11fa-ff15-4eb8-89b7-279feb816a8a.png",
-        createdAt: new Date("2023-04-05"),
-        createdBy: "user1",
-      }
-    ],
-    location: {
-      id: "loc4",
-      coordinates: { lat: 59.3350, lng: 18.0707 },
-      city: "Stockholm",
-      address: "Sveavägen 48",
-      restaurantId: "4",
-    },
-    contact: {
-      id: "con4",
-      phone: "08-765432",
-      website: "https://sushiwave.se",
-      restaurantId: "4",
-    },
-    hours: [
-      {
-        id: "h4",
-        days: ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"],
-        startTime: "11:30",
-        endTime: "15:00",
-        type: "LUNCH",
-        restaurantId: "4",
-      }
-    ],
-    lunchMenus: [
-      {
-        id: "lm4",
-        name: "Sushi Lunch",
-        restaurantId: "4",
-        hoursId: "h4",
-        lunchIncludes: [commonIncludes[0], commonIncludes[4]],
-        lunchMenuItems: [
-          {
-            id: "4-1",
-            name: "Salmon Nigiri Set",
-            description: "8 pieces of fresh salmon nigiri with miso soup.",
-            price: 149,
-            lunchMenuId: "lm4",
-            tags: [commonTags[8], commonTags[3], commonTags[4]],
-            allergens: [commonAllergens[3]],
-            images: [
-              {
-                id: "img4-1",
-                url: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?q=80&w=3540&auto=format&fit=crop",
-                createdAt: new Date("2023-04-05"),
-                createdBy: "user1",
-              }
-            ],
-          },
-          {
-            id: "4-2",
-            name: "Dragon Roll",
-            description: "Shrimp tempura roll topped with avocado and eel sauce.",
-            price: 159,
-            lunchMenuId: "lm4",
-            tags: [commonTags[8], commonTags[3], commonTags[4]],
-            allergens: [commonAllergens[0], commonAllergens[3]],
-            images: [
-              {
-                id: "img4-2",
-                url: "https://images.unsplash.com/photo-1617196034738-26c5f7c977ce?q=80&w=3540&auto=format&fit=crop",
-                createdAt: new Date("2023-04-05"),
-                createdBy: "user1",
-              }
-            ],
-          }
-        ]
-      },
-      {
-        id: "lm4-2",
-        name: "Bento Box",
-        restaurantId: "4",
-        hoursId: "h4",
-        lunchIncludes: [commonIncludes[0], commonIncludes[4]],
-        lunchMenuItems: [
-          {
-            id: "4-3",
-            name: "Chicken Teriyaki Bento",
-            description: "Chicken teriyaki with rice, salad, gyoza, and miso soup.",
-            price: 169,
-            lunchMenuId: "lm4-2",
-            tags: [commonTags[7], commonTags[3], commonTags[4], commonTags[5]],
-            allergens: [commonAllergens[0], commonAllergens[1]],
-            images: [
-              {
-                id: "img4-3",
-                url: "https://images.unsplash.com/photo-1535140728325-a4d3707eee61?q=80&w=3540&auto=format&fit=crop",
-                createdAt: new Date("2023-05-10"),
-                createdBy: "user1",
-              }
-            ],
-          },
-          {
-            id: "4-4",
-            name: "Vegetarian Bento",
-            description: "Vegetable tempura, avocado rolls, edamame, and miso soup.",
-            price: 149,
-            lunchMenuId: "lm4-2",
-            tags: [commonTags[0], commonTags[1], commonTags[3], commonTags[4], commonTags[5]],
-            allergens: [commonAllergens[0]],
-            images: [
-              {
-                id: "img4-4",
-                url: "https://images.unsplash.com/photo-1615361200141-f45961382ce8?q=80&w=3464&auto=format&fit=crop",
-                createdAt: new Date("2023-05-10"),
-                createdBy: "user1",
-              }
-            ],
-          }
-        ]
-      }
-    ]
-  },
-  {
-    id: "5",
-    name: "Tandoori Palace",
-    cuisines: [commonCuisines[6]],
+    id: 5,
+    name: "Thai Basil",
+    cityId: 3,
+    cuisine: "Thai",
     rating: 4.3,
-    popularDishes: ["Butter Chicken", "Vegetable Biryani"],
-    reservationLinks: ["https://bookatable.com/tandoori-palace"],
-    features: [commonFeatures[0], commonFeatures[2], commonFeatures[3], commonFeatures[4]],
-    createdAt: new Date("2023-05-12"),
-    updatedAt: new Date("2023-10-05"),
+    imageUrl: "/lovable-uploads/69a99559-942d-4055-9499-9975525c9964.jpg",
+    address: "Södra Förstadsgatan 30, 211 43 Malmö",
+    openingHours: "11:30 - 21:30",
+    priceRange: "Mid-Range",
+    menu: [
+      { id: 13, name: "Pad Thai", description: "Stir-fried rice noodles with shrimp, tofu, and peanuts", price: 145, category: "Noodles" },
+      { id: 14, name: "Green Curry", description: "Green curry with coconut milk, bamboo shoots, and vegetables", price: 130, category: "Curry" },
+      { id: 15, name: "Mango Sticky Rice", description: "Sweet sticky rice with fresh mango", price: 70, category: "Dessert" },
+    ],
+    reviews: [
+      { id: 9, restaurantId: 5, author: "Lena", rating: 4, comment: "Delicious and authentic Thai food.", date: "2023-12-01" },
+      { id: 10, restaurantId: 5, author: "Thomas", rating: 5, comment: "The best Thai restaurant in Malmö!", date: "2023-11-15" },
+    ],
     images: [
-      {
-        id: "img5",
-        url: "/lovable-uploads/309fd144-3819-4e34-a69a-d6ede0b59cab.png",
-        createdAt: new Date("2023-05-12"),
-        createdBy: "user1",
-      }
-    ],
-    location: {
-      id: "loc5",
-      coordinates: { lat: 59.3126, lng: 18.0549 },
-      city: "Stockholm",
-      address: "Hornsgatan 85",
-      restaurantId: "5",
-    },
-    contact: {
-      id: "con5",
-      phone: "08-987654",
-      website: "https://tandooripalace.se",
-      restaurantId: "5",
-    },
-    hours: [
-      {
-        id: "h5",
-        days: ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"],
-        startTime: "11:00",
-        endTime: "14:30",
-        type: "LUNCH",
-        restaurantId: "5",
-      }
-    ],
-    lunchMenus: [
-      {
-        id: "lm5",
-        name: "Lunch Thali",
-        restaurantId: "5",
-        hoursId: "h5",
-        lunchIncludes: [commonIncludes[0], commonIncludes[2], commonIncludes[4]],
-        lunchMenuItems: [
-          {
-            id: "5-1",
-            name: "Butter Chicken Thali",
-            description: "Creamy butter chicken with rice, naan, raita, and dal.",
-            price: 139,
-            lunchMenuId: "lm5",
-            tags: [commonTags[7], commonTags[3], commonTags[4]],
-            allergens: [commonAllergens[0], commonAllergens[1]],
-            images: [
-              {
-                id: "img5-1",
-                url: "https://images.unsplash.com/photo-1585937421612-70a008356cf4?q=80&w=3456&auto=format&fit=crop",
-                createdAt: new Date("2023-05-12"),
-                createdBy: "user1",
-              }
-            ],
-          },
-          {
-            id: "5-2",
-            name: "Vegetable Biryani",
-            description: "Aromatic rice with mixed vegetables, served with raita and papadum.",
-            price: 129,
-            lunchMenuId: "lm5",
-            tags: [commonTags[0], commonTags[3], commonTags[4]],
-            allergens: [commonAllergens[1]],
-            images: [
-              {
-                id: "img5-2",
-                url: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?q=80&w=3540&auto=format&fit=crop",
-                createdAt: new Date("2023-05-12"),
-                createdBy: "user1",
-              }
-            ],
-          }
-        ]
-      },
-      {
-        id: "lm5-2",
-        name: "Tandoori Specials",
-        restaurantId: "5",
-        hoursId: "h5",
-        lunchIncludes: [commonIncludes[0], commonIncludes[2], commonIncludes[3], commonIncludes[4]],
-        lunchMenuItems: [
-          {
-            id: "5-3",
-            name: "Tandoori Chicken",
-            description: "Marinated chicken grilled in tandoor, served with rice and mint chutney.",
-            price: 149,
-            lunchMenuId: "lm5-2",
-            tags: [commonTags[7], commonTags[3], commonTags[4], commonTags[6]],
-            allergens: [commonAllergens[1]],
-            images: [
-              {
-                id: "img5-3",
-                url: "https://images.unsplash.com/photo-1610057099431-d73a1c9d2f2f?q=80&w=3387&auto=format&fit=crop",
-                createdAt: new Date("2023-06-20"),
-                createdBy: "user1",
-              }
-            ],
-          },
-          {
-            id: "5-4",
-            name: "Paneer Tikka Masala",
-            description: "Cottage cheese cubes in spiced tomato gravy with rice and naan.",
-            price: 139,
-            lunchMenuId: "lm5-2",
-            tags: [commonTags[0], commonTags[3], commonTags[4], commonTags[6]],
-            allergens: [commonAllergens[0], commonAllergens[1]],
-            images: [
-              {
-                id: "img5-4",
-                url: "https://images.unsplash.com/photo-1574484284002-952d92456975?q=80&w=3474&auto=format&fit=crop",
-                createdAt: new Date("2023-06-20"),
-                createdBy: "user1",
-              }
-            ],
-          }
-        ]
-      }
+      "/lovable-uploads/69a99559-942d-4055-9499-9975525c9964.jpg",
+      "/lovable-uploads/69a99559-942d-4055-9499-9975525c9964.jpg",
+      "/lovable-uploads/69a99559-942d-4055-9499-9975525c9964.jpg",
     ]
-  }
+  },
+  {
+    id: 6,
+    name: "Burger Joint",
+    cityId: 3,
+    cuisine: "American",
+    rating: 3.5,
+    imageUrl: "/lovable-uploads/e859951d-9f4f-453b-a81d-649349a6043b.jpg",
+    address: "Davidshallstorg 5, 211 45 Malmö",
+    openingHours: "11:00 - 01:00",
+    priceRange: "Budget",
+    menu: [
+      { id: 16, name: "Classic Burger", description: "Beef burger with lettuce, tomato, and cheese", price: 85, category: "Burgers" },
+      { id: 17, name: "Fries", description: "Crispy french fries", price: 30, category: "Sides" },
+      { id: 18, name: "Milkshake", description: "Vanilla milkshake", price: 50, category: "Drinks" },
+    ],
+    reviews: [
+      { id: 11, restaurantId: 6, author: "Karin", rating: 3, comment: "Decent burger, good for a quick bite.", date: "2023-10-01" },
+      { id: 12, restaurantId: 6, author: "Martin", rating: 4, comment: "The fries are really good!", date: "2023-09-15" },
+    ],
+    images: [
+      "/lovable-uploads/e859951d-9f4f-453b-a81d-649349a6043b.jpg",
+      "/lovable-uploads/e859951d-9f4f-453b-a81d-649349a6043b.jpg",
+      "/lovable-uploads/e859951d-9f4f-453b-a81d-649349a6043b.jpg",
+    ]
+  },
+  {
+    id: 7,
+    name: "Mediterranean Grill",
+    cityId: 4,
+    cuisine: "Mediterranean",
+    rating: 4.6,
+    imageUrl: "/lovable-uploads/49996553-e546-4965-81fb-1958a9a3859a.jpg",
+    address: "Östra Ågatan 27, 753 22 Uppsala",
+    openingHours: "11:00 - 23:00",
+    priceRange: "Mid-Range",
+    menu: [
+      { id: 19, name: "Souvlaki", description: "Grilled meat skewers with pita bread and tzatziki", price: 120, category: "Main Course" },
+      { id: 20, name: "Hummus", description: "Chickpea dip with olive oil and pita bread", price: 65, category: "Appetizer" },
+      { id: 21, name: "Baklava", description: "Sweet pastry with nuts and syrup", price: 75, category: "Dessert" },
+    ],
+    reviews: [
+      { id: 13, restaurantId: 7, author: "Sofia", rating: 5, comment: "Amazing food and great service!", date: "2023-08-01" },
+      { id: 14, restaurantId: 7, author: "Anders", rating: 4, comment: "The best Mediterranean food in Uppsala.", date: "2023-07-15" },
+    ],
+    images: [
+      "/lovable-uploads/49996553-e546-4965-81fb-1958a9a3859a.jpg",
+      "/lovable-uploads/49996553-e546-4965-81fb-1958a9a3859a.jpg",
+      "/lovable-uploads/49996553-e546-4965-81fb-1958a9a3859a.jpg",
+    ]
+  },
+  {
+    id: 8,
+    name: "French Bistro",
+    cityId: 4,
+    cuisine: "French",
+    rating: 4.2,
+    imageUrl: "/lovable-uploads/953f7974-09a5-499d-99a3-448054984375.jpg",
+    address: "Sysslomansgatan 9, 752 23 Uppsala",
+    openingHours: "17:00 - 24:00",
+    priceRange: "High-End",
+    menu: [
+      { id: 22, name: "Steak Frites", description: "Grilled steak with french fries", price: 220, category: "Main Course" },
+      { id: 23, name: "Crème brûlée", description: "Custard dessert with a hard caramel layer", price: 90, category: "Dessert" },
+      { id: 24, name: "Onion Soup", description: "Classic french onion soup", price: 80, category: "Appetizer" },
+    ],
+    reviews: [
+      { id: 15, restaurantId: 8, author: "Elin", rating: 4, comment: "Elegant atmosphere and delicious food.", date: "2023-06-01" },
+      { id: 16, restaurantId: 8, author: "Gustav", rating: 5, comment: "The crème brûlée is a must-try!", date: "2023-05-15" },
+    ],
+    images: [
+      "/lovable-uploads/953f7974-09a5-499d-99a3-448054984375.jpg",
+      "/lovable-uploads/953f7974-09a5-499d-99a3-448054984375.jpg",
+      "/lovable-uploads/953f7974-09a5-499d-99a3-448054984375.jpg",
+    ]
+  },
+  {
+    id: 9,
+    name: "Swedish Kitchen",
+    cityId: 5,
+    cuisine: "Swedish",
+    rating: 4.1,
+    imageUrl: "/lovable-uploads/69a99559-942d-4055-9499-9975525c9964.jpg",
+    address: "Storgatan 44, 582 23 Linköping",
+    openingHours: "11:00 - 22:00",
+    priceRange: "Mid-Range",
+    menu: [
+      { id: 25, name: "Meatballs", description: "Swedish meatballs with mashed potatoes and lingonberry jam", price: 135, category: "Main Course" },
+      { id: 26, name: "Herring", description: "Pickled herring with potatoes and crispbread", price: 95, category: "Appetizer" },
+      { id: 27, name: "Princess Cake", description: "Layered sponge cake with cream and marzipan", price: 80, category: "Dessert" },
+    ],
+    reviews: [
+      { id: 17, restaurantId: 9, author: "Olivia", rating: 4, comment: "Classic Swedish dishes, well-prepared.", date: "2023-04-01" },
+      { id: 18, restaurantId: 9, author: "William", rating: 4, comment: "A taste of Sweden!", date: "2023-03-15" },
+    ],
+    images: [
+      "/lovable-uploads/69a99559-942d-4055-9499-9975525c9964.jpg",
+      "/lovable-uploads/69a99559-942d-4055-9499-9975525c9964.jpg",
+      "/lovable-uploads/69a99559-942d-4055-9499-9975525c9964.jpg",
+    ]
+  },
+  {
+    id: 10,
+    name: "Asian Fusion",
+    cityId: 5,
+    cuisine: "Asian",
+    rating: 3.9,
+    imageUrl: "/lovable-uploads/e859951d-9f4f-453b-a81d-649349a6043b.jpg",
+    address: "Nygatan 22, 582 19 Linköping",
+    openingHours: "11:30 - 21:30",
+    priceRange: "Mid-Range",
+    menu: [
+      { id: 28, name: "Sushi Platter", description: "Assorted sushi rolls and nigiri", price: 180, category: "Sushi" },
+      { id: 29, name: "Ramen", description: "Japanese noodle soup with pork and vegetables", price: 140, category: "Noodles" },
+      { id: 30, name: "Bubble Tea", description: "Taiwanese tea-based drink with tapioca pearls", price: 55, category: "Drinks" },
+    ],
+    reviews: [
+      { id: 19, restaurantId: 10, author: "Ella", rating: 4, comment: "Great variety of Asian dishes.", date: "2023-02-01" },
+      { id: 20, restaurantId: 10, author: "Oscar", rating: 3, comment: "The ramen was a bit bland.", date: "2023-01-15" },
+    ],
+    images: [
+      "/lovable-uploads/e859951d-9f4f-453b-a81d-649349a6043b.jpg",
+      "/lovable-uploads/e859951d-9f4f-453b-a81d-649349a6043b.jpg",
+      "/lovable-uploads/e859951d-9f4f-453b-a81d-649349a6043b.jpg",
+    ]
+  },
 ];
-
-// Helper functions
-export const getRestaurantsByCity = (city: string): Restaurant[] => {
-  return restaurants.filter(
-    restaurant => restaurant.location && restaurant.location.city.toLowerCase() === city.toLowerCase()
-  );
-};
-
-export const getRestaurantById = (id: string): Restaurant | undefined => {
-  return restaurants.find(restaurant => restaurant.id === id);
-};
-
-export const getFilteredRestaurants = (
-  city: string, 
-  filters: { 
-    priceLevel?: number[], 
-    mealTypes?: string[], 
-    rating?: number 
-  }
-): Restaurant[] => {
-  return restaurants.filter(restaurant => {
-    // Filter by city
-    if (city && (!restaurant.location || restaurant.location.city.toLowerCase() !== city.toLowerCase())) {
-      return false;
-    }
-    
-    // Filter by rating
-    if (filters.rating && restaurant.rating < filters.rating) {
-      return false;
-    }
-    
-    // Filter by meal types (using cuisines as proxy for now)
-    if (filters.mealTypes && filters.mealTypes.length > 0) {
-      const hasMatchingMealType = restaurant.cuisines.some(cuisine => 
-        filters.mealTypes?.includes(cuisine.name)
-      );
-      if (!hasMatchingMealType) {
-        return false;
-      }
-    }
-    
-    return true;
-  });
-};

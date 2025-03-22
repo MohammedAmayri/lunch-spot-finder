@@ -62,16 +62,18 @@ const Map: React.FC<MapProps> = ({
         attributionControl: false, // We'll add our own attribution control with custom styling
       });
 
-      // Add custom styled tile layer
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      // Add custom styled tile layer - Using a more subtle map style
+      // Using CartoDB Voyager tiles which are more subtle and neutral
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         maxZoom: 19,
-        opacity: 0.8,
+        opacity: 0.9,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
       }).addTo(map.current);
       
-      // Add custom styled attribution - FIXED: changed how we set the attribution text
+      // Add custom styled attribution
       L.control.attribution({
         position: 'bottomright',
-        prefix: '<a href="https://leafletjs.com" class="text-xs text-brand-600 hover:text-brand-700">Leaflet</a> | <a href="https://www.openstreetmap.org/copyright" class="text-xs text-gray-500 hover:text-gray-700">OpenStreetMap</a>'
+        prefix: '<a href="https://leafletjs.com" class="text-xs text-brand-600 hover:text-brand-700">Leaflet</a> | <a href="https://carto.com/attributions" class="text-xs text-gray-500 hover:text-gray-700">CARTO</a>'
       }).addTo(map.current);
       
       // Add zoom control with custom position
@@ -138,8 +140,9 @@ const Map: React.FC<MapProps> = ({
       .leaflet-container a {
         color: #00A67E !important;
       }
+      /* Apply subtle filter to map tiles for a more cohesive design */
       .leaflet-tile {
-        filter: saturate(0.9) hue-rotate(10deg) brightness(1.02) !important;
+        filter: saturate(0.85) hue-rotate(5deg) brightness(1.02) contrast(0.95) !important;
       }
       .leaflet-attribution-flag {
         display: none !important;

@@ -115,7 +115,6 @@ export const popularCities = [
   { id: "10", name: "Norrköping" },
 ];
 
-// Common tags
 const commonTags: Tag[] = [
   { id: "t1", name: "Vegetarian" },
   { id: "t2", name: "Vegan" },
@@ -129,7 +128,6 @@ const commonTags: Tag[] = [
   { id: "t10", name: "Healthy" },
 ];
 
-// Common includes
 const commonIncludes: LunchInclude[] = [
   { id: "i1", name: "Coffee" },
   { id: "i2", name: "Salad" },
@@ -138,7 +136,6 @@ const commonIncludes: LunchInclude[] = [
   { id: "i5", name: "Water" },
 ];
 
-// Common allergens
 const commonAllergens: Allergen[] = [
   { id: "a1", name: "Gluten", description: "Contains wheat, rye, barley or oats" },
   { id: "a2", name: "Lactose", description: "Contains milk products" },
@@ -146,7 +143,6 @@ const commonAllergens: Allergen[] = [
   { id: "a4", name: "Shellfish", description: "Contains shellfish" },
 ];
 
-// Common features
 const commonFeatures: Feature[] = [
   { id: "f1", name: "Outdoor seating" },
   { id: "f2", name: "Accessible" },
@@ -155,7 +151,6 @@ const commonFeatures: Feature[] = [
   { id: "f5", name: "Parking" },
 ];
 
-// Common cuisines - Change from string array to proper Cuisine objects
 export const commonCuisines = [
   { id: "c1", name: "Italian" },
   { id: "c2", name: "Swedish" },
@@ -173,7 +168,7 @@ export const restaurants: Restaurant[] = [
   {
     id: "1",
     name: "Kebab Kungen",
-    cuisines: [{ id: "c4", name: "French" }], // Fixed: Use Cuisine object instead of string
+    cuisines: [{ id: "c4", name: "French" }],
     rating: 4.2,
     popularDishes: ["Kebab Meny", "Falafel Roll"],
     reservationLinks: [],
@@ -287,7 +282,7 @@ export const restaurants: Restaurant[] = [
     cuisines: [
       { id: "c1", name: "Italian" },
       { id: "c9", name: "International" }
-    ], // Fixed: Use Cuisine objects instead of strings
+    ],
     rating: 4.4,
     popularDishes: ["Gulashsoppa", "Catch of the Day"],
     reservationLinks: ["https://bookatable.com/strandhuset"],
@@ -400,7 +395,7 @@ export const restaurants: Restaurant[] = [
   {
     id: "3",
     name: "Pasta Paradiso",
-    cuisines: [{ id: "c2", name: "Swedish" }], // Fixed: Use Cuisine object instead of string
+    cuisines: [{ id: "c2", name: "Swedish" }],
     rating: 4.7,
     popularDishes: ["Pasta Carbonara", "Margherita Pizza"],
     reservationLinks: ["https://bookatable.com/pasta-paradiso"],
@@ -533,7 +528,7 @@ export const restaurants: Restaurant[] = [
     cuisines: [
       { id: "c3", name: "Asian" },
       { id: "c8", name: "Seafood" }
-    ], // Fixed: Use Cuisine objects instead of strings
+    ],
     rating: 4.6,
     popularDishes: ["Salmon Nigiri", "Dragon Roll"],
     reservationLinks: ["https://bookatable.com/sushi-wave"],
@@ -663,7 +658,7 @@ export const restaurants: Restaurant[] = [
   {
     id: "5",
     name: "Tandoori Palace",
-    cuisines: [{ id: "c7", name: "Vegan" }], // Fixed: Use Cuisine object instead of string
+    cuisines: [{ id: "c7", name: "Vegan" }],
     rating: 4.3,
     popularDishes: ["Butter Chicken", "Vegetable Biryani"],
     reservationLinks: ["https://bookatable.com/tandoori-palace"],
@@ -781,4 +776,13 @@ export const restaurants: Restaurant[] = [
               {
                 id: "img5-4",
                 url: "https://images.unsplash.com/photo-1574484284002-952d92456975?q=80&w=3474&auto=format&fit=crop",
-                createdAt: new Date("2023-
+                createdAt: new Date("2023-06-20"),
+                createdBy: "user1",
+              }
+            ],
+          }
+        ]
+      }
+    ]
+  }
+];

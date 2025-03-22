@@ -32,11 +32,19 @@ const Map: React.FC<MapProps> = ({
   const initializeMap = (token: string) => {
     if (!mapContainer.current) return;
     
-    // Clear previous map if it exists
+    // Clear previous markers
+    markers.current.forEach(marker => marker.remove());
+    markers.current = [];
+    
+    // Only remove the map if it exists and is valid
     if (map.current) {
-      markers.current.forEach(marker => marker.remove());
-      markers.current = [];
-      map.current.remove();
+      try {
+        map.current.remove();
+      } catch (err) {
+        console.error('Error removing map:', err);
+        // Just set reference to null if removal fails
+        map.current = null;
+      }
     }
 
     try {
@@ -84,8 +92,17 @@ const Map: React.FC<MapProps> = ({
     // Clean up on unmount
     return () => {
       if (map.current) {
+        // Clear markers first
         markers.current.forEach(marker => marker.remove());
-        map.current.remove();
+        markers.current = [];
+        
+        // Safely remove map
+        try {
+          map.current.remove();
+        } catch (err) {
+          console.error('Error removing map during cleanup:', err);
+        }
+        map.current = null;
       }
     };
   }, [customToken]);

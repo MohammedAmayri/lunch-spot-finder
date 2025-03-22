@@ -1,8 +1,10 @@
+
 import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Restaurant } from '../data/mockData';
 import { MapPin } from 'lucide-react';
+import { useIsMobile } from '../hooks/use-mobile';
 
 // Fix for default marker icons in Leaflet
 import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
@@ -33,6 +35,7 @@ const Map: React.FC<MapProps> = ({
   const markers = useRef<L.Marker[]>([]);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [mapError, setMapError] = useState<string | null>(null);
+  const isMobile = useIsMobile();
 
   // Function to initialize the map
   const initializeMap = () => {
@@ -56,7 +59,7 @@ const Map: React.FC<MapProps> = ({
       // Create the map instance with custom styling
       map.current = L.map(mapContainer.current, {
         center: [59.3293, 18.0686], // Stockholm coordinates by default
-        zoom: 13,
+        zoom: isMobile ? 12 : 13, // Slightly zoomed out on mobile
         zoomControl: false, // We'll add our own zoom control in a better position
         attributionControl: false, // We'll add our own attribution control with custom styling
       });
@@ -88,6 +91,13 @@ const Map: React.FC<MapProps> = ({
         // Make map controls more subtle
         mapElement.classList.add('rounded-lg', 'shadow-md', 'border', 'border-gray-200');
       }
+      
+      // Force map update for mobile view
+      setTimeout(() => {
+        if (map.current) {
+          map.current.invalidateSize();
+        }
+      }, 100);
       
       setMapLoaded(true);
       setMapError(null);
@@ -190,7 +200,27 @@ const Map: React.FC<MapProps> = ({
       // Remove custom styles
       document.head.removeChild(style);
     };
-  }, []);
+  }, [isMobile]);
+
+  // Handle resize events to make sure map is rendered correctly
+  useEffect(() => {
+    const handleResize = () => {
+      if (map.current) {
+        map.current.invalidateSize();
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    
+    // Make sure map is properly sized on initial render
+    if (mapLoaded && map.current) {
+      setTimeout(handleResize, 100);
+    }
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [mapLoaded]);
 
   // Update markers when restaurants or selectedRestaurant changes
   useEffect(() => {

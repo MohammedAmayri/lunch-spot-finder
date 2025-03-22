@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getRestaurantsByCity } from '../data/mockData';
@@ -7,9 +6,10 @@ import FilterBar from '../components/FilterBar';
 import RestaurantCard from '../components/RestaurantCard';
 import Map from '../components/Map';
 import { Search, SlidersHorizontal, MapPin } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import AnimatedPage from '../components/AnimatedPage';
 import { toast } from 'sonner';
+import { useIsMobile } from '../hooks/use-mobile';
 
 const SearchResults = () => {
   const { city = '' } = useParams<{ city: string }>();
@@ -18,7 +18,8 @@ const SearchResults = () => {
   const [typeFilters, setTypeFilters] = useState<string[]>([]);
   const [ratingFilter, setRatingFilter] = useState<number | null>(null);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
-  const [showMap, setShowMap] = useState(false);
+  const [mapHeight, setMapHeight] = useState('250px');
+  const isMobile = useIsMobile();
   
   // Get restaurants for the given city
   const restaurants = getRestaurantsByCity(city);
@@ -125,33 +126,29 @@ const SearchResults = () => {
                   setRatingFilter={setRatingFilter}
                 />
                 
-                <button 
-                  onClick={() => setShowMap(!showMap)}
-                  className="filter-button md:hidden"
-                >
-                  <SlidersHorizontal size={16} />
-                  <span>{showMap ? 'Hide Map' : 'Show Map'}</span>
-                </button>
+                {isMobile && (
+                  <button 
+                    onClick={() => setMapHeight(mapHeight === '250px' ? '400px' : '250px')}
+                    className="filter-button"
+                  >
+                    <SlidersHorizontal size={16} />
+                    <span>{mapHeight === '250px' ? 'Expand Map' : 'Collapse Map'}</span>
+                  </button>
+                )}
               </div>
             </div>
             
-            <AnimatePresence>
-              {showMap && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="mb-6 overflow-hidden md:hidden"
-                >
+            {isMobile && (
+              <div className="mb-6 h-auto overflow-hidden">
+                <div style={{ height: mapHeight, transition: 'height 0.3s ease' }}>
                   <Map 
                     restaurants={filteredRestaurants}
                     selectedRestaurant={selectedRestaurant}
                     setSelectedRestaurant={setSelectedRestaurant}
                   />
-                </motion.div>
-              )}
-            </AnimatePresence>
+                </div>
+              </div>
+            )}
             
             <div className="mb-4 flex justify-between items-center">
               <p className="text-gray-600 font-medium">

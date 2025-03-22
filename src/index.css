@@ -76,7 +76,7 @@
   }
 }
 
-/* Custom styles for filter buttons - removed @apply with group */
+/* Custom styles for filter buttons - updated to not use @apply with group */
 .filter-button {
   display: flex;
   align-items: center;

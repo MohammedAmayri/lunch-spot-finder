@@ -44,18 +44,18 @@ const CitySearch = () => {
       );
   
   return (
-    <div ref={searchRef} className="relative w-full">
+    <div ref={searchRef} className="relative w-full max-w-xl mx-auto">
       <form onSubmit={handleSubmit} className="relative">
         <input
           ref={inputRef}
           type="text"
-          placeholder="Kartområde"
+          placeholder="Search for a city..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           onFocus={() => setIsFocused(true)}
-          className="w-full py-3 pl-12 pr-4 rounded-full bg-white 
-                     shadow-soft border border-gray-100
-                     focus:outline-none focus:ring-2 focus:ring-brand-200
+          className="w-full py-4 pl-12 pr-4 text-lg rounded-full bg-white/90 
+                     backdrop-blur-md shadow-lg border border-white/20
+                     focus:outline-none focus:ring-2 focus:ring-brand-300
                      transition-all duration-300"
         />
         <button
@@ -74,7 +74,7 @@ const CitySearch = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="absolute z-10 w-full mt-2 bg-white rounded-lg shadow-lg overflow-hidden"
+            className="absolute z-10 w-full mt-2 bg-white rounded-lg shadow-xl overflow-hidden"
           >
             <div className="p-3">
               <h3 className="text-sm font-medium text-gray-500 mb-2 px-2">Suggestions</h3>

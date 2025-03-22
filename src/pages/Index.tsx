@@ -8,64 +8,52 @@ import AnimatedPage from '../components/AnimatedPage';
 
 const Index = () => {
   return (
-    <AnimatedPage>
-      <div className="h-screen flex flex-col md:flex-row">
-        {/* Header stays on top for all devices */}
+    <AnimatedPage className="min-h-screen">
+      <div className="relative min-h-screen bg-hero-pattern bg-cover bg-center">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60"></div>
+        
         <Header />
         
-        {/* Left side - Image section */}
-        <motion.div 
-          className="w-full md:w-1/2 h-[40vh] md:h-screen bg-brand-500 relative overflow-hidden"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
-        >
-          <div 
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: "url('/lovable-uploads/bfb87e28-0ac2-4fa2-973d-3a344bdbe2be.png')" }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-b from-brand-600/20 to-brand-600/60"></div>
-          </div>
-        </motion.div>
-        
-        {/* Right side - Content section */}
-        <div className="w-full md:w-1/2 bg-white flex flex-col justify-center p-8 md:p-12 lg:p-16">
-          <motion.div 
-            className="max-w-lg mx-auto"
+        <div className="relative z-10 container mx-auto px-4 py-20 flex flex-col items-center justify-center min-h-screen">
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
+            className="max-w-3xl mx-auto text-center mb-10"
           >
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 font-display leading-tight">
-              Ha koll på den<br />bästa lunchen!
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
+              Find the perfect lunch spot
             </h1>
-            <p className="text-gray-600 mb-8">
-              Sveriges enklaste lunchmeny 🇸🇪
+            <p className="text-xl text-white/90 mb-8 max-w-xl mx-auto">
+              Discover the best lunch options in your city, with menus, prices, and ratings.
             </p>
             
             <CitySearch />
-            
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="mt-10 space-y-4"
-            >
-              {features.map((feature, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3, delay: 0.5 + index * 0.1 }}
-                  className="flex items-start"
-                >
-                  <div className="text-brand-500 mr-3 mt-1">
-                    <Check className="h-5 w-5" />
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl w-full"
+          >
+            {features.map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
+                className="glass-card p-6 rounded-lg text-white"
+              >
+                <div className="flex items-start mb-4">
+                  <div className="rounded-full bg-brand-500/20 p-2 mr-3">
+                    <Check className="h-5 w-5 text-brand-400" />
                   </div>
-                  <p className="text-gray-700">{feature.description}</p>
-                </motion.div>
-              ))}
-            </motion.div>
+                  <h3 className="font-semibold text-lg">{feature.title}</h3>
+                </div>
+                <p className="text-white/80 text-sm">{feature.description}</p>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
       </div>
@@ -76,15 +64,15 @@ const Index = () => {
 const features = [
   {
     title: "Filter by preferences",
-    description: "Filtrera efter dina preferenser"
+    description: "Find restaurants that match your dietary needs and price range."
   },
   {
     title: "Browse daily menus",
-    description: "Bläddra smidigt i alla menyer"
+    description: "See what's on the menu today at restaurants near you."
   },
   {
     title: "Save time & money",
-    description: "Spara tid & pengar"
+    description: "Compare prices and options to make the best lunch decision."
   }
 ];
 

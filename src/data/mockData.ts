@@ -1,3 +1,4 @@
+
 export interface LunchInclude {
   id: string;
   name: string;
@@ -115,6 +116,7 @@ export const popularCities = [
   { id: "10", name: "Norrköping" },
 ];
 
+// Common tags
 const commonTags: Tag[] = [
   { id: "t1", name: "Vegetarian" },
   { id: "t2", name: "Vegan" },
@@ -128,6 +130,7 @@ const commonTags: Tag[] = [
   { id: "t10", name: "Healthy" },
 ];
 
+// Common includes
 const commonIncludes: LunchInclude[] = [
   { id: "i1", name: "Coffee" },
   { id: "i2", name: "Salad" },
@@ -136,6 +139,7 @@ const commonIncludes: LunchInclude[] = [
   { id: "i5", name: "Water" },
 ];
 
+// Common allergens
 const commonAllergens: Allergen[] = [
   { id: "a1", name: "Gluten", description: "Contains wheat, rye, barley or oats" },
   { id: "a2", name: "Lactose", description: "Contains milk products" },
@@ -143,6 +147,7 @@ const commonAllergens: Allergen[] = [
   { id: "a4", name: "Shellfish", description: "Contains shellfish" },
 ];
 
+// Common features
 const commonFeatures: Feature[] = [
   { id: "f1", name: "Outdoor seating" },
   { id: "f2", name: "Accessible" },
@@ -151,24 +156,24 @@ const commonFeatures: Feature[] = [
   { id: "f5", name: "Parking" },
 ];
 
-export const commonCuisines = [
-  { id: "c1", name: "Italian" },
-  { id: "c2", name: "Swedish" },
+// Common cuisines
+const commonCuisines: Cuisine[] = [
+  { id: "c1", name: "Swedish" },
+  { id: "c2", name: "Italian" },
   { id: "c3", name: "Asian" },
-  { id: "c4", name: "French" },
-  { id: "c5", name: "American" },
+  { id: "c4", name: "Mediterranean" },
+  { id: "c5", name: "Mexican" },
   { id: "c6", name: "Vegetarian" },
-  { id: "c7", name: "Vegan" },
-  { id: "c8", name: "Seafood" },
-  { id: "c9", name: "International" },
-  { id: "c10", name: "Mexican" }
+  { id: "c7", name: "Indian" },
+  { id: "c8", name: "Japanese" },
+  { id: "c9", name: "American" },
 ];
 
 export const restaurants: Restaurant[] = [
   {
     id: "1",
     name: "Kebab Kungen",
-    cuisines: [{ id: "c4", name: "French" }],
+    cuisines: [commonCuisines[3]],
     rating: 4.2,
     popularDishes: ["Kebab Meny", "Falafel Roll"],
     reservationLinks: [],
@@ -279,10 +284,7 @@ export const restaurants: Restaurant[] = [
   {
     id: "2",
     name: "Strandhuset",
-    cuisines: [
-      { id: "c1", name: "Italian" },
-      { id: "c9", name: "International" }
-    ],
+    cuisines: [commonCuisines[0], commonCuisines[8]],
     rating: 4.4,
     popularDishes: ["Gulashsoppa", "Catch of the Day"],
     reservationLinks: ["https://bookatable.com/strandhuset"],
@@ -395,7 +397,7 @@ export const restaurants: Restaurant[] = [
   {
     id: "3",
     name: "Pasta Paradiso",
-    cuisines: [{ id: "c2", name: "Swedish" }],
+    cuisines: [commonCuisines[1]],
     rating: 4.7,
     popularDishes: ["Pasta Carbonara", "Margherita Pizza"],
     reservationLinks: ["https://bookatable.com/pasta-paradiso"],
@@ -525,10 +527,7 @@ export const restaurants: Restaurant[] = [
   {
     id: "4",
     name: "Sushi Wave",
-    cuisines: [
-      { id: "c3", name: "Asian" },
-      { id: "c8", name: "Seafood" }
-    ],
+    cuisines: [commonCuisines[2], commonCuisines[7]],
     rating: 4.6,
     popularDishes: ["Salmon Nigiri", "Dragon Roll"],
     reservationLinks: ["https://bookatable.com/sushi-wave"],
@@ -658,7 +657,7 @@ export const restaurants: Restaurant[] = [
   {
     id: "5",
     name: "Tandoori Palace",
-    cuisines: [{ id: "c7", name: "Vegan" }],
+    cuisines: [commonCuisines[6]],
     rating: 4.3,
     popularDishes: ["Butter Chicken", "Vegetable Biryani"],
     reservationLinks: ["https://bookatable.com/tandoori-palace"],
@@ -787,14 +786,46 @@ export const restaurants: Restaurant[] = [
   }
 ];
 
-// Helper function to get restaurants by city
+// Helper functions
 export const getRestaurantsByCity = (city: string): Restaurant[] => {
-  return restaurants.filter(restaurant => 
-    restaurant.location?.city.toLowerCase() === city.toLowerCase()
+  return restaurants.filter(
+    restaurant => restaurant.location && restaurant.location.city.toLowerCase() === city.toLowerCase()
   );
 };
 
-// Helper function to get restaurant by id
 export const getRestaurantById = (id: string): Restaurant | undefined => {
   return restaurants.find(restaurant => restaurant.id === id);
+};
+
+export const getFilteredRestaurants = (
+  city: string, 
+  filters: { 
+    priceLevel?: number[], 
+    mealTypes?: string[], 
+    rating?: number 
+  }
+): Restaurant[] => {
+  return restaurants.filter(restaurant => {
+    // Filter by city
+    if (city && (!restaurant.location || restaurant.location.city.toLowerCase() !== city.toLowerCase())) {
+      return false;
+    }
+    
+    // Filter by rating
+    if (filters.rating && restaurant.rating < filters.rating) {
+      return false;
+    }
+    
+    // Filter by meal types (using cuisines as proxy for now)
+    if (filters.mealTypes && filters.mealTypes.length > 0) {
+      const hasMatchingMealType = restaurant.cuisines.some(cuisine => 
+        filters.mealTypes?.includes(cuisine.name)
+      );
+      if (!hasMatchingMealType) {
+        return false;
+      }
+    }
+    
+    return true;
+  });
 };

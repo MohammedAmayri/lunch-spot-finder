@@ -19,10 +19,6 @@ export default {
 			}
 		},
 		extend: {
-			fontFamily: {
-                sans: ['Outfit', 'sans-serif'],
-                display: ['Outfit', 'sans-serif'],
-            },
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -132,7 +128,6 @@ export default {
 			},
             backgroundImage: {
                 'hero-pattern': "linear-gradient(120deg, rgba(0, 166, 126, 0.8), rgba(0, 47, 38, 0.9)), url('/lovable-uploads/0007e781-c396-4c79-a5de-4444beb8c384.png')",
-                'food-animation': "url('/lovable-uploads/bfb87e28-0ac2-4fa2-973d-3a344bdbe2be.png')",
                 'card-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))',
                 'green-gradient': 'linear-gradient(120deg, #00A67E, #008568)',
             },

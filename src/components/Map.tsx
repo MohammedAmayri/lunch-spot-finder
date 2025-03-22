@@ -11,7 +11,8 @@ interface MapProps {
   setSelectedRestaurant?: (restaurant: Restaurant | null) => void;
 }
 
-const MAPBOX_TOKEN = 'pk.eyJ1IjoibG92YWJsZS1kZXZlbG9wZXIiLCJhIjoiY2xzaDdsc24wMDM5aTJwczBlbzRzb2ZlcyJ9.UZ1hUNbpRrm6xjd3ktOxZA';
+// The token might not be valid, so we'll allow the user to provide their own
+const MAPBOX_TOKEN = 'pk.eyJ1IjoibG92YWJsZWRldiIsImEiOiJjbHRsOWc2dWowYmxtMmpzNmZ6OWNxdDNnIn0._j-Qu9kLNEifsZP4CF90mw';
 
 const Map: React.FC<MapProps> = ({ 
   restaurants,
@@ -25,6 +26,7 @@ const Map: React.FC<MapProps> = ({
   const [tokenInputValue, setTokenInputValue] = useState(MAPBOX_TOKEN);
   const [customToken, setCustomToken] = useState<string | null>(null);
   const [showTokenInput, setShowTokenInput] = useState(false);
+  const [mapError, setMapError] = useState<string | null>(null);
 
   // Function to initialize the map
   const initializeMap = (token: string) => {
@@ -53,6 +55,14 @@ const Map: React.FC<MapProps> = ({
       
       map.current.on('load', () => {
         setMapLoaded(true);
+        setMapError(null);
+      });
+      
+      // Better error handling
+      map.current.on('error', (e) => {
+        console.error('Map error:', e);
+        setMapError('Error loading map: ' + (e.error?.message || 'Unknown error'));
+        setShowTokenInput(true);
       });
       
       // If there are no restaurants, center on Sweden
@@ -61,6 +71,7 @@ const Map: React.FC<MapProps> = ({
       }
     } catch (error) {
       console.error('Error initializing map:', error);
+      setMapError('Failed to initialize map. Please provide a valid Mapbox token.');
       setShowTokenInput(true);
     }
   };
@@ -182,6 +193,7 @@ const Map: React.FC<MapProps> = ({
       {showTokenInput ? (
         <div className="absolute inset-0 bg-gray-50 p-4 flex flex-col items-center justify-center text-center z-10 rounded-lg">
           <h3 className="text-lg font-medium mb-2">Map Access Token Required</h3>
+          {mapError && <p className="text-red-500 text-sm mb-2">{mapError}</p>}
           <p className="text-sm text-gray-600 mb-4">
             Enter your Mapbox public token to display the map. 
             Get one at <a href="https://mapbox.com/" target="_blank" rel="noopener noreferrer" className="text-brand-500 underline">mapbox.com</a>

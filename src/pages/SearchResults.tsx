@@ -9,6 +9,7 @@ import Map from '../components/Map';
 import { Search, SlidersHorizontal, MapPin } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AnimatedPage from '../components/AnimatedPage';
+import { toast } from 'sonner';
 
 const SearchResults = () => {
   const { city = '' } = useParams<{ city: string }>();
@@ -26,6 +27,15 @@ const SearchResults = () => {
   useEffect(() => {
     document.title = `Lunch spots in ${city} | Lunch Kompis`;
   }, [city]);
+  
+  // Apply notification when filters change
+  useEffect(() => {
+    if (priceFilters.length > 0 || typeFilters.length > 0 || ratingFilter !== null) {
+      toast.info('Filters applied', {
+        description: 'The restaurant list has been filtered based on your criteria.'
+      });
+    }
+  }, [priceFilters, typeFilters, ratingFilter]);
   
   // Function to filter restaurants based on search term and filters
   const filteredRestaurants = restaurants.filter(restaurant => {
@@ -45,6 +55,23 @@ const SearchResults = () => {
         typeFilters.includes(cuisine.name)
       );
       if (!hasMatchingType) {
+        return false;
+      }
+    }
+    
+    // Filter by price range
+    if (priceFilters.length === 2) {
+      const minPrice = priceFilters[0];
+      const maxPrice = priceFilters[1];
+      
+      // Check if any lunch menu item falls within the price range
+      const hasItemInPriceRange = restaurant.lunchMenus.some(menu => 
+        menu.lunchMenuItems.some(item => 
+          item.price >= minPrice && item.price <= maxPrice
+        )
+      );
+      
+      if (!hasItemInPriceRange) {
         return false;
       }
     }

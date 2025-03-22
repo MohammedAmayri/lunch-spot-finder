@@ -1,10 +1,9 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Coffee, Salad, Sandwich, ExternalLink } from 'lucide-react';
+import { MapPin, Coffee, Salad, Sandwich, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Restaurant, LunchMenuItem, Tag } from '../data/mockData';
-import Carousel, { CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import {
   Tooltip,
   TooltipContent,
@@ -67,6 +66,15 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, index }) =>
     `${restaurant.hours[0].startTime} - ${restaurant.hours[0].endTime}` : 
     'Hours not available';
   
+  // Handle slide navigation
+  const goToPreviousSlide = () => {
+    setCurrentSlide((prev) => (prev === 0 ? totalSlides - 1 : prev - 1));
+  };
+  
+  const goToNextSlide = () => {
+    setCurrentSlide((prev) => (prev === totalSlides - 1 ? 0 : prev + 1));
+  };
+  
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -118,14 +126,41 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, index }) =>
             </div>
           </div>
           
-          <Carousel
-            slides={lunchMenuItems.map((item, i) => ({
-              id: item.id,
-              src: (item.images && item.images.length > 0) ? item.images[0].url : getRandomPlaceholderImage(),
-              alt: item.name
-            }))}
-            options={{ loop: true }}
-          />
+          {/* Carousel */}
+          <div className="relative rounded-xl overflow-hidden h-48 md:h-64">
+            {lunchMenuItems.map((item, i) => (
+              <div 
+                key={item.id}
+                className={`absolute inset-0 transition-opacity duration-300 ${i === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+              >
+                <img 
+                  src={(item.images && item.images.length > 0) ? item.images[0].url : getRandomPlaceholderImage()}
+                  alt={item.name}
+                  className="w-full h-full object-cover rounded-xl"
+                />
+              </div>
+            ))}
+            
+            {/* Navigation Arrows - only show if there's more than one slide */}
+            {totalSlides > 1 && (
+              <>
+                <button 
+                  onClick={goToPreviousSlide}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 text-gray-800 rounded-full p-2 z-20 shadow-md hover:bg-white transition-colors"
+                  aria-label="Previous slide"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+                <button 
+                  onClick={goToNextSlide}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 text-gray-800 rounded-full p-2 z-20 shadow-md hover:bg-white transition-colors"
+                  aria-label="Next slide"
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </>
+            )}
+          </div>
           
           {/* Menu Item Details */}
           {lunchMenuItems.length > 0 && (

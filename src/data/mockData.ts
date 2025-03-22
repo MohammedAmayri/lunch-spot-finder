@@ -155,14 +155,25 @@ const commonFeatures: Feature[] = [
   { id: "f5", name: "Parking" },
 ];
 
-// Common cuisines
-export const commonCuisines = ["Italian", "Swedish", "Asian", "French", "American", "Vegetarian", "Vegan", "Seafood", "International", "Mexican"];
+// Common cuisines - Change from string array to proper Cuisine objects
+export const commonCuisines = [
+  { id: "c1", name: "Italian" },
+  { id: "c2", name: "Swedish" },
+  { id: "c3", name: "Asian" },
+  { id: "c4", name: "French" },
+  { id: "c5", name: "American" },
+  { id: "c6", name: "Vegetarian" },
+  { id: "c7", name: "Vegan" },
+  { id: "c8", name: "Seafood" },
+  { id: "c9", name: "International" },
+  { id: "c10", name: "Mexican" }
+];
 
 export const restaurants: Restaurant[] = [
   {
     id: "1",
     name: "Kebab Kungen",
-    cuisines: [commonCuisines[3]],
+    cuisines: [{ id: "c4", name: "French" }], // Fixed: Use Cuisine object instead of string
     rating: 4.2,
     popularDishes: ["Kebab Meny", "Falafel Roll"],
     reservationLinks: [],
@@ -273,7 +284,10 @@ export const restaurants: Restaurant[] = [
   {
     id: "2",
     name: "Strandhuset",
-    cuisines: [commonCuisines[0], commonCuisines[8]],
+    cuisines: [
+      { id: "c1", name: "Italian" },
+      { id: "c9", name: "International" }
+    ], // Fixed: Use Cuisine objects instead of strings
     rating: 4.4,
     popularDishes: ["Gulashsoppa", "Catch of the Day"],
     reservationLinks: ["https://bookatable.com/strandhuset"],
@@ -386,7 +400,7 @@ export const restaurants: Restaurant[] = [
   {
     id: "3",
     name: "Pasta Paradiso",
-    cuisines: [commonCuisines[1]],
+    cuisines: [{ id: "c2", name: "Swedish" }], // Fixed: Use Cuisine object instead of string
     rating: 4.7,
     popularDishes: ["Pasta Carbonara", "Margherita Pizza"],
     reservationLinks: ["https://bookatable.com/pasta-paradiso"],
@@ -516,7 +530,10 @@ export const restaurants: Restaurant[] = [
   {
     id: "4",
     name: "Sushi Wave",
-    cuisines: [commonCuisines[2], commonCuisines[7]],
+    cuisines: [
+      { id: "c3", name: "Asian" },
+      { id: "c8", name: "Seafood" }
+    ], // Fixed: Use Cuisine objects instead of strings
     rating: 4.6,
     popularDishes: ["Salmon Nigiri", "Dragon Roll"],
     reservationLinks: ["https://bookatable.com/sushi-wave"],
@@ -646,7 +663,7 @@ export const restaurants: Restaurant[] = [
   {
     id: "5",
     name: "Tandoori Palace",
-    cuisines: [commonCuisines[6]],
+    cuisines: [{ id: "c7", name: "Vegan" }], // Fixed: Use Cuisine object instead of string
     rating: 4.3,
     popularDishes: ["Butter Chicken", "Vegetable Biryani"],
     reservationLinks: ["https://bookatable.com/tandoori-palace"],
@@ -764,57 +781,4 @@ export const restaurants: Restaurant[] = [
               {
                 id: "img5-4",
                 url: "https://images.unsplash.com/photo-1574484284002-952d92456975?q=80&w=3474&auto=format&fit=crop",
-                createdAt: new Date("2023-06-20"),
-                createdBy: "user1",
-              }
-            ],
-          }
-        ]
-      }
-    ]
-  }
-];
-
-// Helper functions
-export const getRestaurantsByCity = (city: string): Restaurant[] => {
-  return restaurants.filter(
-    restaurant => restaurant.location && restaurant.location.city.toLowerCase() === city.toLowerCase()
-  );
-};
-
-export const getRestaurantById = (id: string): Restaurant | undefined => {
-  return restaurants.find(restaurant => restaurant.id === id);
-};
-
-export const getFilteredRestaurants = (
-  city: string, 
-  filters: { 
-    priceLevel?: number[], 
-    mealTypes?: string[], 
-    rating?: number 
-  }
-): Restaurant[] => {
-  return restaurants.filter(restaurant => {
-    // Filter by city
-    if (city && (!restaurant.location || restaurant.location.city.toLowerCase() !== city.toLowerCase())) {
-      return false;
-    }
-    
-    // Filter by rating
-    if (filters.rating && restaurant.rating < filters.rating) {
-      return false;
-    }
-    
-    // Filter by meal types (using cuisines as proxy for now)
-    if (filters.mealTypes && filters.mealTypes.length > 0) {
-      const hasMatchingMealType = restaurant.cuisines.some(cuisine => 
-        filters.mealTypes?.includes(cuisine.name)
-      );
-      if (!hasMatchingMealType) {
-        return false;
-      }
-    }
-    
-    return true;
-  });
-};
+                createdAt: new Date("2023-

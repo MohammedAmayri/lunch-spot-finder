@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ChevronDown, Utensils, DollarSign, Star, Filter, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -62,7 +61,8 @@ const FilterBar: React.FC<FilterBarProps> = ({
     setRatingFilter(ratingFilter === rating ? null : rating);
   };
 
-  const cuisineOptions = commonCuisines.map(cuisine => cuisine.name);
+  // Fix: commonCuisines is now directly used as an array of strings
+  const cuisineOptions = commonCuisines;
 
   // Price Filter Popover
   const PriceFilter = () => (

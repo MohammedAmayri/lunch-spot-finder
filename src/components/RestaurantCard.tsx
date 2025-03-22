@@ -129,6 +129,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, index }) =>
             className="w-full"
             onSelect={(api) => {
               if (api) {
+                // Fix: Use the carousel API correctly
                 setCurrentSlide(api.selectedScrollSnap());
               }
             }}

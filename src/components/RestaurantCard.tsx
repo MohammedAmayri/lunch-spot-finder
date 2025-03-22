@@ -90,9 +90,9 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, index }) =>
         >
           <CarouselContent className="-ml-2 md:-ml-4">
             {restaurant.menuItems.map((item, i) => (
-              <CarouselItem key={item.id} className="pl-2 md:pl-4 basis-full md:basis-1/2 lg:basis-1/3">
-                <div className="bg-gray-50 rounded-xl overflow-hidden h-full flex flex-col">
-                  <div className="relative h-48 w-full">
+              <CarouselItem key={item.id} className="pl-2 md:pl-4 basis-full md:basis-1/1 lg:basis-1/1">
+                <div className="bg-gray-50 rounded-xl overflow-hidden">
+                  <div className="relative h-64 w-full">
                     <img 
                       src={item.image || getRandomPlaceholderImage()} 
                       alt={item.name} 
@@ -100,74 +100,78 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, index }) =>
                       loading="lazy"
                     />
                   </div>
-                  <div className="p-4 flex-1 flex flex-col">
-                    <div className="flex justify-between items-start mb-2">
-                      <h4 className="text-lg font-bold text-gray-900">{item.name}</h4>
-                      <span className="font-bold text-gray-900">{item.price} kr</span>
-                    </div>
-                    
-                    {/* Opening Hours */}
-                    <div className="text-sm text-gray-500 mb-3">
-                      {restaurant.hours}
-                    </div>
-                    
-                    {/* Included Items */}
-                    <div className="flex items-center space-x-3 mt-auto">
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <div className={cn(
-                              "p-1.5 rounded-full", 
-                              hasExtra(item.tags, 'coffee') 
-                                ? "text-gray-700" 
-                                : "text-gray-300"
-                            )}>
-                              <Coffee size={20} />
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>{hasExtra(item.tags, 'coffee') 
-                              ? "Coffee included" 
-                              : "Coffee not included"}</p>
-                          </TooltipContent>
-                        </Tooltip>
+                  <div className="p-5">
+                    <div className="flex flex-col">
+                      <div className="flex justify-between items-center mb-2">
+                        <h4 className="text-2xl font-bold text-gray-900">{item.name}</h4>
+                        <span className="text-xl font-bold text-gray-900">{item.price} kr</span>
+                      </div>
+                      
+                      <div className="flex justify-between items-center">
+                        {/* Opening Hours */}
+                        <div className="text-base text-gray-600">
+                          {restaurant.hours}
+                        </div>
                         
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <div className={cn(
-                              "p-1.5 rounded-full", 
-                              hasExtra(item.tags, 'salad') 
-                                ? "text-gray-700" 
-                                : "text-gray-300"
-                            )}>
-                              <Salad size={20} />
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>{hasExtra(item.tags, 'salad') 
-                              ? "Salad included" 
-                              : "Salad not included"}</p>
-                          </TooltipContent>
-                        </Tooltip>
-                        
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <div className={cn(
-                              "p-1.5 rounded-full", 
-                              hasExtra(item.tags, 'dessert') 
-                                ? "text-gray-700" 
-                                : "text-gray-300"
-                            )}>
-                              <Sandwich size={20} className="rotate-45" />
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>{hasExtra(item.tags, 'dessert') 
-                              ? "Dessert included" 
-                              : "Dessert not included"}</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
+                        {/* Included Items */}
+                        <div className="flex items-center space-x-4">
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <div className={cn(
+                                  "p-1.5", 
+                                  hasExtra(item.tags, 'coffee') 
+                                    ? "text-gray-800" 
+                                    : "text-gray-300"
+                                )}>
+                                  <Coffee size={24} />
+                                </div>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>{hasExtra(item.tags, 'coffee') 
+                                  ? "Coffee included" 
+                                  : "Coffee not included"}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                            
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <div className={cn(
+                                  "p-1.5", 
+                                  hasExtra(item.tags, 'salad') 
+                                    ? "text-gray-800" 
+                                    : "text-gray-300"
+                                )}>
+                                  <Salad size={24} />
+                                </div>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>{hasExtra(item.tags, 'salad') 
+                                  ? "Salad included" 
+                                  : "Salad not included"}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                            
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <div className={cn(
+                                  "p-1.5", 
+                                  hasExtra(item.tags, 'dessert') 
+                                    ? "text-gray-800" 
+                                    : "text-gray-300"
+                                )}>
+                                  <Sandwich size={24} className="rotate-45" />
+                                </div>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>{hasExtra(item.tags, 'dessert') 
+                                  ? "Dessert included" 
+                                  : "Dessert not included"}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, ReactNode } from "react";
 import {
   EmblaCarouselType,
   EmblaOptionsType,
@@ -129,22 +129,37 @@ const Carousel = ({ slides, options = {}, plugins = [] }: Props) => {
 
 export default Carousel;
 
+// Export carousel component interfaces
+interface CarouselContentProps {
+  children: ReactNode;
+  className?: string;
+}
+
+interface CarouselItemProps {
+  children: ReactNode;
+  className?: string;
+}
+
+interface CarouselControlProps {
+  className?: string;
+}
+
 // Export carousel components
-export const CarouselContent = ({ children, className }: { children: React.ReactNode, className?: string }) => (
+export const CarouselContent: React.FC<CarouselContentProps> = ({ children, className }) => (
   <div className={`flex ${className || ''}`}>{children}</div>
 );
 
-export const CarouselItem = ({ children, className }: { children: React.ReactNode, className?: string }) => (
+export const CarouselItem: React.FC<CarouselItemProps> = ({ children, className }) => (
   <div className={`min-w-0 ${className || ''}`}>{children}</div>
 );
 
-export const CarouselNext = ({ className }: { className?: string }) => (
+export const CarouselNext: React.FC<CarouselControlProps> = ({ className }) => (
   <button className={`absolute rounded-full ${className || ''}`}>
     <ArrowRight size={16} />
   </button>
 );
 
-export const CarouselPrevious = ({ className }: { className?: string }) => (
+export const CarouselPrevious: React.FC<CarouselControlProps> = ({ className }) => (
   <button className={`absolute rounded-full ${className || ''}`}>
     <ArrowLeft size={16} />
   </button>

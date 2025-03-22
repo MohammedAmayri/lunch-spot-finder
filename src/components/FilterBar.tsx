@@ -1,10 +1,10 @@
-
 import React, { useState } from 'react';
 import { ChevronDown, Utensils, DollarSign, Star, Filter, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Checkbox } from '@/components/ui/checkbox';
-import Carousel, { CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import Carousel from '@/components/ui/carousel';
+import { CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import {
   Popover,
   PopoverContent,
@@ -35,7 +35,6 @@ const FilterBar: React.FC<FilterBarProps> = ({
   const isMobile = useIsMobile();
   const [priceRange, setPriceRange] = useState<[number, number]>([50, 500]);
   
-  // Apply price range filter
   const handlePriceRangeChange = (value: number[]) => {
     setPriceRange([value[0], value[1]]);
   };
@@ -44,7 +43,6 @@ const FilterBar: React.FC<FilterBarProps> = ({
     setpriceFilters([priceRange[0], priceRange[1]]);
   };
   
-  // Toggle type filter
   const toggleTypeFilter = (type: string) => {
     if (typeFilters.includes(type)) {
       setTypeFilters(typeFilters.filter(t => t !== type));
@@ -53,14 +51,12 @@ const FilterBar: React.FC<FilterBarProps> = ({
     }
   };
   
-  // Toggle rating filter
   const toggleRatingFilter = (rating: number) => {
     setRatingFilter(ratingFilter === rating ? null : rating);
   };
 
   const cuisineOptions = commonCuisines.map(cuisine => cuisine.name);
 
-  // Price Filter Popover
   const PriceFilter = () => (
     <Popover>
       <PopoverTrigger asChild>
@@ -134,7 +130,6 @@ const FilterBar: React.FC<FilterBarProps> = ({
     </Popover>
   );
 
-  // Food Type Filter Popover
   const FoodTypeFilter = () => (
     <Popover>
       <PopoverTrigger asChild>
@@ -181,7 +176,6 @@ const FilterBar: React.FC<FilterBarProps> = ({
     </Popover>
   );
 
-  // Rating Filter Popover
   const RatingFilter = () => (
     <Popover>
       <PopoverTrigger asChild>
@@ -253,15 +247,16 @@ const FilterBar: React.FC<FilterBarProps> = ({
         className="flex gap-2 max-w-full"
       >
         {isMobile ? (
-          <Carousel
-            slides={[
-              { id: 1, src: '', alt: 'filters' },
-              { id: 2, src: '', alt: 'price' },
-              { id: 3, src: '', alt: 'food-type' },
-              { id: 4, src: '', alt: 'rating' }
-            ]}
-            options={{ loop: false }}
-          >
+          <div className="w-full">
+            <Carousel
+              slides={[
+                { id: 1, src: '', alt: 'filters' },
+                { id: 2, src: '', alt: 'price' },
+                { id: 3, src: '', alt: 'food-type' },
+                { id: 4, src: '', alt: 'rating' }
+              ]}
+              options={{ loop: false }}
+            />
             <CarouselContent className="-ml-2">
               <CarouselItem className="pl-2 basis-auto">
                 <div className="filter-button flex items-center">
@@ -282,7 +277,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
                 <RatingFilter />
               </CarouselItem>
             </CarouselContent>
-          </Carousel>
+          </div>
         ) : (
           <div className="flex gap-2">
             {filterButtons}

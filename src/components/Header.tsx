@@ -34,17 +34,17 @@ const Header = () => {
                 transform="rotate(-45 12 12)" />
             </svg>
           </div>
-          <span className={`font-bold text-xl ${isHomePage ? 'text-white' : 'text-brand-500'}`}>
+          <span className="font-bold text-xl text-brand-500">
             Lunch Kompis
           </span>
         </Link>
         
-        <nav className="hidden md:flex space-x-8">
-          <NavLinks isHomePage={isHomePage} />
-        </nav>
+        <div className="hidden md:flex space-x-8">
+          <NavLinks isHomePage={false} />
+        </div>
         
         <button
-          className={`md:hidden text-${isHomePage ? 'white' : 'brand-500'}`}
+          className="md:hidden text-brand-500"
           onClick={toggleMenu}
           aria-label="Toggle menu"
         >
@@ -94,7 +94,7 @@ const NavLinks: React.FC<NavLinksProps> = ({ isHomePage, isMobile, closeMenu }) 
           to={link.path}
           className={`
             ${isMobile ? 'block py-2 text-brand-600' : ''}
-            ${isHomePage && !isMobile ? 'text-white hover:text-brand-100' : 'text-gray-700 hover:text-brand-500'}
+            ${isHomePage ? 'text-white hover:text-brand-100' : 'text-gray-700 hover:text-brand-500'}
             font-medium transition-all duration-200
             ${location.pathname === link.path ? 'font-bold' : ''}
           `}

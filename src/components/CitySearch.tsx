@@ -54,7 +54,7 @@ const CitySearch = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onFocus={() => setIsFocused(true)}
-            className="w-full py-3 pl-12 pr-4 text-gray-700 bg-white rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-brand-300"
+            className="w-full py-3 px-12 text-gray-700 bg-white rounded-full shadow-md border border-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-200"
           />
           <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-brand-500">
             <Search size={20} />
@@ -101,31 +101,6 @@ const CitySearch = () => {
                   </motion.li>
                 ))}
               </ul>
-            </div>
-            <div className="px-3 py-2 bg-gray-50 text-center">
-              <button
-                className="text-sm text-brand-600 hover:text-brand-700 font-medium"
-                onClick={() => {
-                  setIsFocused(false);
-                  if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
-                      () => {
-                        // This would normally use the position to find nearby cities
-                        // For now, just navigate to a default city
-                        handleSearch("Stockholm");
-                      },
-                      (error) => {
-                        console.error("Error getting location:", error);
-                      }
-                    );
-                  }
-                }}
-              >
-                <div className="flex items-center justify-center gap-1.5">
-                  <MapPin size={14} />
-                  <span>Use my current location</span>
-                </div>
-              </button>
             </div>
           </motion.div>
         )}

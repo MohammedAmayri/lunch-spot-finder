@@ -164,6 +164,9 @@ const commonCuisines: Cuisine[] = [
   { id: "c4", name: "Mediterranean" },
   { id: "c5", name: "Mexican" },
   { id: "c6", name: "Vegetarian" },
+  { id: "c7", name: "Indian" },
+  { id: "c8", name: "Japanese" },
+  { id: "c9", name: "American" },
 ];
 
 export const restaurants: Restaurant[] = [
@@ -249,14 +252,39 @@ export const restaurants: Restaurant[] = [
             ],
           }
         ]
+      },
+      {
+        id: "lm1-2",
+        name: "Weekend Special",
+        restaurantId: "1",
+        hoursId: "h1",
+        lunchIncludes: [commonIncludes[0], commonIncludes[1], commonIncludes[3]],
+        lunchMenuItems: [
+          {
+            id: "1-3",
+            name: "Deluxe Kebab Platter",
+            description: "Premium mixed kebab with rice, salad, and special sauce.",
+            price: 159,
+            lunchMenuId: "lm1-2",
+            tags: [commonTags[7], commonTags[3], commonTags[4], commonTags[5], commonTags[6]],
+            allergens: [commonAllergens[0], commonAllergens[1]],
+            images: [
+              {
+                id: "img1-3",
+                url: "https://images.unsplash.com/photo-1529563021893-cc83c992d75d?q=80&w=3540&auto=format&fit=crop",
+                createdAt: new Date("2023-02-10"),
+                createdBy: "user1",
+              }
+            ],
+          }
+        ]
       }
     ]
   },
-  // Additional restaurants would follow the same pattern - truncated for brevity
   {
     id: "2",
     name: "Strandhuset",
-    cuisines: [commonCuisines[2], commonCuisines[4]],
+    cuisines: [commonCuisines[0], commonCuisines[8]],
     rating: 4.4,
     popularDishes: ["Gulashsoppa", "Catch of the Day"],
     reservationLinks: ["https://bookatable.com/strandhuset"],
@@ -309,6 +337,7 @@ export const restaurants: Restaurant[] = [
             price: 139,
             lunchMenuId: "lm2",
             tags: [commonTags[7], commonTags[3], commonTags[4], commonTags[5], commonTags[6]],
+            allergens: [commonAllergens[1]],
             images: [
               {
                 id: "img2-1",
@@ -325,11 +354,428 @@ export const restaurants: Restaurant[] = [
             price: 159,
             lunchMenuId: "lm2",
             tags: [commonTags[8], commonTags[3], commonTags[4], commonTags[5]],
+            allergens: [commonAllergens[3]],
             images: [
               {
                 id: "img2-2",
                 url: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?q=80&w=3540&auto=format&fit=crop",
                 createdAt: new Date("2023-02-10"),
+                createdBy: "user1",
+              }
+            ],
+          }
+        ]
+      },
+      {
+        id: "lm2-2",
+        name: "Executive Menu",
+        restaurantId: "2",
+        hoursId: "h2",
+        lunchIncludes: [commonIncludes[0], commonIncludes[1], commonIncludes[2], commonIncludes[3], commonIncludes[4]],
+        lunchMenuItems: [
+          {
+            id: "2-3",
+            name: "Swedish Meatballs",
+            description: "Traditional Swedish meatballs with lingonberry, mashed potatoes and gravy.",
+            price: 169,
+            lunchMenuId: "lm2-2",
+            tags: [commonTags[7], commonTags[3], commonTags[4], commonTags[5], commonTags[6]],
+            allergens: [commonAllergens[0], commonAllergens[1]],
+            images: [
+              {
+                id: "img2-3",
+                url: "https://images.unsplash.com/photo-1515516969-d4008cc6241a?q=80&w=3540&auto=format&fit=crop",
+                createdAt: new Date("2023-03-15"),
+                createdBy: "user1",
+              }
+            ],
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "3",
+    name: "Pasta Paradiso",
+    cuisines: [commonCuisines[1]],
+    rating: 4.7,
+    popularDishes: ["Pasta Carbonara", "Margherita Pizza"],
+    reservationLinks: ["https://bookatable.com/pasta-paradiso"],
+    features: [commonFeatures[0], commonFeatures[2], commonFeatures[3]],
+    createdAt: new Date("2023-03-01"),
+    updatedAt: new Date("2023-08-10"),
+    images: [
+      {
+        id: "img3",
+        url: "/lovable-uploads/c2cdbdc2-9f1e-4ec7-a20c-8ace633be697.png",
+        createdAt: new Date("2023-03-01"),
+        createdBy: "user1",
+      }
+    ],
+    location: {
+      id: "loc3",
+      coordinates: { lat: 59.3293, lng: 18.0686 },
+      city: "Stockholm",
+      address: "Kungsgatan 25",
+      restaurantId: "3",
+    },
+    contact: {
+      id: "con3",
+      phone: "08-123456",
+      website: "https://pastaparadiso.se",
+      restaurantId: "3",
+    },
+    hours: [
+      {
+        id: "h3",
+        days: ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"],
+        startTime: "11:00",
+        endTime: "14:30",
+        type: "LUNCH",
+        restaurantId: "3",
+      }
+    ],
+    lunchMenus: [
+      {
+        id: "lm3",
+        name: "Lunch Specials",
+        restaurantId: "3",
+        hoursId: "h3",
+        lunchIncludes: [commonIncludes[0], commonIncludes[2]],
+        lunchMenuItems: [
+          {
+            id: "3-1",
+            name: "Pasta Carbonara",
+            description: "Creamy pasta with pancetta, egg, and parmesan cheese.",
+            price: 129,
+            lunchMenuId: "lm3",
+            tags: [commonTags[7], commonTags[3], commonTags[4]],
+            allergens: [commonAllergens[0], commonAllergens[1]],
+            images: [
+              {
+                id: "img3-1",
+                url: "https://images.unsplash.com/photo-1588013273468-315fd88ea34c?q=80&w=3540&auto=format&fit=crop",
+                createdAt: new Date("2023-03-01"),
+                createdBy: "user1",
+              }
+            ],
+          },
+          {
+            id: "3-2",
+            name: "Margherita Pizza",
+            description: "Classic pizza with tomato sauce, mozzarella, and fresh basil.",
+            price: 119,
+            lunchMenuId: "lm3",
+            tags: [commonTags[0], commonTags[3], commonTags[4]],
+            allergens: [commonAllergens[0], commonAllergens[1]],
+            images: [
+              {
+                id: "img3-2",
+                url: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?q=80&w=3540&auto=format&fit=crop",
+                createdAt: new Date("2023-03-01"),
+                createdBy: "user1",
+              }
+            ],
+          }
+        ]
+      },
+      {
+        id: "lm3-2",
+        name: "Chef's Selection",
+        restaurantId: "3",
+        hoursId: "h3",
+        lunchIncludes: [commonIncludes[0], commonIncludes[1], commonIncludes[2], commonIncludes[3]],
+        lunchMenuItems: [
+          {
+            id: "3-3",
+            name: "Risotto ai Funghi",
+            description: "Creamy risotto with wild mushrooms and truffle oil.",
+            price: 159,
+            lunchMenuId: "lm3-2",
+            tags: [commonTags[0], commonTags[3], commonTags[4], commonTags[5], commonTags[6]],
+            allergens: [commonAllergens[1]],
+            images: [
+              {
+                id: "img3-3",
+                url: "https://images.unsplash.com/photo-1623431103558-a3c337d5f340?q=80&w=3432&auto=format&fit=crop",
+                createdAt: new Date("2023-04-15"),
+                createdBy: "user1",
+              }
+            ],
+          },
+          {
+            id: "3-4",
+            name: "Osso Buco",
+            description: "Slow-cooked veal shank with gremolata and saffron risotto.",
+            price: 189,
+            lunchMenuId: "lm3-2",
+            tags: [commonTags[7], commonTags[3], commonTags[4], commonTags[5], commonTags[6]],
+            allergens: [commonAllergens[1]],
+            images: [
+              {
+                id: "img3-4",
+                url: "https://images.unsplash.com/photo-1544782331-9cc5c535a6f4?q=80&w=3474&auto=format&fit=crop",
+                createdAt: new Date("2023-04-15"),
+                createdBy: "user1",
+              }
+            ],
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "4",
+    name: "Sushi Wave",
+    cuisines: [commonCuisines[2], commonCuisines[7]],
+    rating: 4.6,
+    popularDishes: ["Salmon Nigiri", "Dragon Roll"],
+    reservationLinks: ["https://bookatable.com/sushi-wave"],
+    features: [commonFeatures[2], commonFeatures[3]],
+    createdAt: new Date("2023-04-05"),
+    updatedAt: new Date("2023-09-20"),
+    images: [
+      {
+        id: "img4",
+        url: "/lovable-uploads/d17e11fa-ff15-4eb8-89b7-279feb816a8a.png",
+        createdAt: new Date("2023-04-05"),
+        createdBy: "user1",
+      }
+    ],
+    location: {
+      id: "loc4",
+      coordinates: { lat: 59.3350, lng: 18.0707 },
+      city: "Stockholm",
+      address: "Sveavägen 48",
+      restaurantId: "4",
+    },
+    contact: {
+      id: "con4",
+      phone: "08-765432",
+      website: "https://sushiwave.se",
+      restaurantId: "4",
+    },
+    hours: [
+      {
+        id: "h4",
+        days: ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"],
+        startTime: "11:30",
+        endTime: "15:00",
+        type: "LUNCH",
+        restaurantId: "4",
+      }
+    ],
+    lunchMenus: [
+      {
+        id: "lm4",
+        name: "Sushi Lunch",
+        restaurantId: "4",
+        hoursId: "h4",
+        lunchIncludes: [commonIncludes[0], commonIncludes[4]],
+        lunchMenuItems: [
+          {
+            id: "4-1",
+            name: "Salmon Nigiri Set",
+            description: "8 pieces of fresh salmon nigiri with miso soup.",
+            price: 149,
+            lunchMenuId: "lm4",
+            tags: [commonTags[8], commonTags[3], commonTags[4]],
+            allergens: [commonAllergens[3]],
+            images: [
+              {
+                id: "img4-1",
+                url: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?q=80&w=3540&auto=format&fit=crop",
+                createdAt: new Date("2023-04-05"),
+                createdBy: "user1",
+              }
+            ],
+          },
+          {
+            id: "4-2",
+            name: "Dragon Roll",
+            description: "Shrimp tempura roll topped with avocado and eel sauce.",
+            price: 159,
+            lunchMenuId: "lm4",
+            tags: [commonTags[8], commonTags[3], commonTags[4]],
+            allergens: [commonAllergens[0], commonAllergens[3]],
+            images: [
+              {
+                id: "img4-2",
+                url: "https://images.unsplash.com/photo-1617196034738-26c5f7c977ce?q=80&w=3540&auto=format&fit=crop",
+                createdAt: new Date("2023-04-05"),
+                createdBy: "user1",
+              }
+            ],
+          }
+        ]
+      },
+      {
+        id: "lm4-2",
+        name: "Bento Box",
+        restaurantId: "4",
+        hoursId: "h4",
+        lunchIncludes: [commonIncludes[0], commonIncludes[4]],
+        lunchMenuItems: [
+          {
+            id: "4-3",
+            name: "Chicken Teriyaki Bento",
+            description: "Chicken teriyaki with rice, salad, gyoza, and miso soup.",
+            price: 169,
+            lunchMenuId: "lm4-2",
+            tags: [commonTags[7], commonTags[3], commonTags[4], commonTags[5]],
+            allergens: [commonAllergens[0], commonAllergens[1]],
+            images: [
+              {
+                id: "img4-3",
+                url: "https://images.unsplash.com/photo-1535140728325-a4d3707eee61?q=80&w=3540&auto=format&fit=crop",
+                createdAt: new Date("2023-05-10"),
+                createdBy: "user1",
+              }
+            ],
+          },
+          {
+            id: "4-4",
+            name: "Vegetarian Bento",
+            description: "Vegetable tempura, avocado rolls, edamame, and miso soup.",
+            price: 149,
+            lunchMenuId: "lm4-2",
+            tags: [commonTags[0], commonTags[1], commonTags[3], commonTags[4], commonTags[5]],
+            allergens: [commonAllergens[0]],
+            images: [
+              {
+                id: "img4-4",
+                url: "https://images.unsplash.com/photo-1615361200141-f45961382ce8?q=80&w=3464&auto=format&fit=crop",
+                createdAt: new Date("2023-05-10"),
+                createdBy: "user1",
+              }
+            ],
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "5",
+    name: "Tandoori Palace",
+    cuisines: [commonCuisines[6]],
+    rating: 4.3,
+    popularDishes: ["Butter Chicken", "Vegetable Biryani"],
+    reservationLinks: ["https://bookatable.com/tandoori-palace"],
+    features: [commonFeatures[0], commonFeatures[2], commonFeatures[3], commonFeatures[4]],
+    createdAt: new Date("2023-05-12"),
+    updatedAt: new Date("2023-10-05"),
+    images: [
+      {
+        id: "img5",
+        url: "/lovable-uploads/309fd144-3819-4e34-a69a-d6ede0b59cab.png",
+        createdAt: new Date("2023-05-12"),
+        createdBy: "user1",
+      }
+    ],
+    location: {
+      id: "loc5",
+      coordinates: { lat: 59.3126, lng: 18.0549 },
+      city: "Stockholm",
+      address: "Hornsgatan 85",
+      restaurantId: "5",
+    },
+    contact: {
+      id: "con5",
+      phone: "08-987654",
+      website: "https://tandooripalace.se",
+      restaurantId: "5",
+    },
+    hours: [
+      {
+        id: "h5",
+        days: ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"],
+        startTime: "11:00",
+        endTime: "14:30",
+        type: "LUNCH",
+        restaurantId: "5",
+      }
+    ],
+    lunchMenus: [
+      {
+        id: "lm5",
+        name: "Lunch Thali",
+        restaurantId: "5",
+        hoursId: "h5",
+        lunchIncludes: [commonIncludes[0], commonIncludes[2], commonIncludes[4]],
+        lunchMenuItems: [
+          {
+            id: "5-1",
+            name: "Butter Chicken Thali",
+            description: "Creamy butter chicken with rice, naan, raita, and dal.",
+            price: 139,
+            lunchMenuId: "lm5",
+            tags: [commonTags[7], commonTags[3], commonTags[4]],
+            allergens: [commonAllergens[0], commonAllergens[1]],
+            images: [
+              {
+                id: "img5-1",
+                url: "https://images.unsplash.com/photo-1585937421612-70a008356cf4?q=80&w=3456&auto=format&fit=crop",
+                createdAt: new Date("2023-05-12"),
+                createdBy: "user1",
+              }
+            ],
+          },
+          {
+            id: "5-2",
+            name: "Vegetable Biryani",
+            description: "Aromatic rice with mixed vegetables, served with raita and papadum.",
+            price: 129,
+            lunchMenuId: "lm5",
+            tags: [commonTags[0], commonTags[3], commonTags[4]],
+            allergens: [commonAllergens[1]],
+            images: [
+              {
+                id: "img5-2",
+                url: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?q=80&w=3540&auto=format&fit=crop",
+                createdAt: new Date("2023-05-12"),
+                createdBy: "user1",
+              }
+            ],
+          }
+        ]
+      },
+      {
+        id: "lm5-2",
+        name: "Tandoori Specials",
+        restaurantId: "5",
+        hoursId: "h5",
+        lunchIncludes: [commonIncludes[0], commonIncludes[2], commonIncludes[3], commonIncludes[4]],
+        lunchMenuItems: [
+          {
+            id: "5-3",
+            name: "Tandoori Chicken",
+            description: "Marinated chicken grilled in tandoor, served with rice and mint chutney.",
+            price: 149,
+            lunchMenuId: "lm5-2",
+            tags: [commonTags[7], commonTags[3], commonTags[4], commonTags[6]],
+            allergens: [commonAllergens[1]],
+            images: [
+              {
+                id: "img5-3",
+                url: "https://images.unsplash.com/photo-1610057099431-d73a1c9d2f2f?q=80&w=3387&auto=format&fit=crop",
+                createdAt: new Date("2023-06-20"),
+                createdBy: "user1",
+              }
+            ],
+          },
+          {
+            id: "5-4",
+            name: "Paneer Tikka Masala",
+            description: "Cottage cheese cubes in spiced tomato gravy with rice and naan.",
+            price: 139,
+            lunchMenuId: "lm5-2",
+            tags: [commonTags[0], commonTags[3], commonTags[4], commonTags[6]],
+            allergens: [commonAllergens[0], commonAllergens[1]],
+            images: [
+              {
+                id: "img5-4",
+                url: "https://images.unsplash.com/photo-1574484284002-952d92456975?q=80&w=3474&auto=format&fit=crop",
+                createdAt: new Date("2023-06-20"),
                 createdBy: "user1",
               }
             ],

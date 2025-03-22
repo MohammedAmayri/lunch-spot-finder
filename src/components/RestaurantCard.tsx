@@ -35,6 +35,21 @@ const hasExtra = (tags: string[], extraType: string): boolean => {
   return tags.some(tag => extraMap[extraType]?.includes(tag));
 };
 
+// Random food placeholder images
+const placeholderImages = [
+  "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
+  "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8NXx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
+  "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTB8fHxlbnwwfHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
+  "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8N3x8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
+  "https://images.unsplash.com/photo-1529042410759-befb1204b468?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTV8fHxlbnwwfHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
+];
+
+// Get a random image from the placeholders array
+const getRandomPlaceholderImage = () => {
+  const randomIndex = Math.floor(Math.random() * placeholderImages.length);
+  return placeholderImages[randomIndex];
+};
+
 const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, index }) => {
   return (
     <motion.div
@@ -77,20 +92,14 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, index }) =>
             {restaurant.menuItems.map((item, i) => (
               <CarouselItem key={item.id} className="pl-2 md:pl-4 basis-full md:basis-1/2 lg:basis-1/3">
                 <div className="bg-gray-50 rounded-xl overflow-hidden h-full flex flex-col">
-                  {item.image ? (
-                    <div className="relative h-48 w-full">
-                      <img 
-                        src={item.image} 
-                        alt={item.name} 
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                    </div>
-                  ) : (
-                    <div className="relative h-48 w-full bg-gray-200 flex items-center justify-center">
-                      <span className="text-gray-400">No image</span>
-                    </div>
-                  )}
+                  <div className="relative h-48 w-full">
+                    <img 
+                      src={item.image || getRandomPlaceholderImage()} 
+                      alt={item.name} 
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
                   <div className="p-4 flex-1 flex flex-col">
                     <div className="flex justify-between items-start mb-2">
                       <h4 className="text-lg font-bold text-gray-900">{item.name}</h4>

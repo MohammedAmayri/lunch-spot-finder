@@ -34,9 +34,29 @@ const Map: React.FC<MapProps> = ({
     
     // Clear previous map if it exists
     if (map.current) {
-      markers.current.forEach(marker => marker.remove());
-      markers.current = [];
-      map.current.remove();
+      try {
+        // First, clear all markers
+        markers.current.forEach(marker => {
+          try {
+            marker.remove();
+          } catch (err) {
+            console.log('Error removing marker:', err);
+          }
+        });
+        markers.current = [];
+        
+        // Then remove the map - but with proper error handling
+        try {
+          map.current.remove();
+        } catch (err) {
+          console.log('Error removing map:', err);
+        }
+      } catch (err) {
+        console.log('Error during map cleanup:', err);
+      }
+      
+      // Ensure map ref is null after removal attempt
+      map.current = null;
     }
 
     try {
@@ -84,8 +104,28 @@ const Map: React.FC<MapProps> = ({
     // Clean up on unmount
     return () => {
       if (map.current) {
-        markers.current.forEach(marker => marker.remove());
-        map.current.remove();
+        try {
+          // First try to clear markers
+          markers.current.forEach(marker => {
+            try {
+              marker.remove();
+            } catch (e) {
+              console.log('Error removing marker during cleanup:', e);
+            }
+          });
+          
+          // Then try to remove the map
+          try {
+            map.current.remove();
+          } catch (e) {
+            console.log('Error removing map during cleanup:', e);
+          }
+        } catch (e) {
+          console.log('General error during map cleanup:', e);
+        }
+        
+        // Ensure map reference is cleared
+        map.current = null;
       }
     };
   }, [customToken]);
@@ -94,8 +134,14 @@ const Map: React.FC<MapProps> = ({
   useEffect(() => {
     if (!map.current || !mapLoaded) return;
     
-    // Remove existing markers
-    markers.current.forEach(marker => marker.remove());
+    // Remove existing markers with proper error handling
+    markers.current.forEach(marker => {
+      try {
+        marker.remove();
+      } catch (e) {
+        console.log('Error removing marker:', e);
+      }
+    });
     markers.current = [];
     
     if (restaurants.length === 0) return;
@@ -131,53 +177,65 @@ const Map: React.FC<MapProps> = ({
         );
       });
       
-      // Create and add marker to map
-      const marker = new mapboxgl.Marker(markerElement)
-        .setLngLat([lng, lat])
-        .addTo(map.current!);
-      
-      // Create popup with restaurant info
-      const popup = new mapboxgl.Popup({ offset: 25, closeButton: false })
-        .setHTML(`
-          <div class="p-2">
-            <h3 class="font-bold">${restaurant.name}</h3>
-            <p class="text-sm">${restaurant.location.address || ''}</p>
-          </div>
-        `);
-      
-      // Show popup on hover
-      markerElement.addEventListener('mouseenter', () => {
-        marker.setPopup(popup);
-        marker.togglePopup();
-      });
-      
-      markerElement.addEventListener('mouseleave', () => {
-        marker.togglePopup();
-      });
-      
-      // Store marker reference for cleanup
-      markers.current.push(marker);
-      
-      // Extend bounds to include this location
-      bounds.extend([lng, lat]);
+      // Create and add marker to map with error handling
+      try {
+        const marker = new mapboxgl.Marker(markerElement)
+          .setLngLat([lng, lat])
+          .addTo(map.current!);
+        
+        // Create popup with restaurant info
+        const popup = new mapboxgl.Popup({ offset: 25, closeButton: false })
+          .setHTML(`
+            <div class="p-2">
+              <h3 class="font-bold">${restaurant.name}</h3>
+              <p class="text-sm">${restaurant.location.address || ''}</p>
+            </div>
+          `);
+        
+        // Show popup on hover
+        markerElement.addEventListener('mouseenter', () => {
+          marker.setPopup(popup);
+          marker.togglePopup();
+        });
+        
+        markerElement.addEventListener('mouseleave', () => {
+          marker.togglePopup();
+        });
+        
+        // Store marker reference for cleanup
+        markers.current.push(marker);
+        
+        // Extend bounds to include this location
+        bounds.extend([lng, lat]);
+      } catch (e) {
+        console.log('Error adding marker:', e);
+      }
     });
     
     // Fit map to show all markers
     if (!bounds.isEmpty()) {
-      map.current.fitBounds(bounds, {
-        padding: 50,
-        maxZoom: 15
-      });
+      try {
+        map.current.fitBounds(bounds, {
+          padding: 50,
+          maxZoom: 15
+        });
+      } catch (e) {
+        console.log('Error fitting bounds:', e);
+      }
     }
     
     // If a restaurant is selected, center on it
     if (selectedRestaurant?.location?.coordinates) {
-      const { lng, lat } = selectedRestaurant.location.coordinates;
-      map.current.flyTo({
-        center: [lng, lat],
-        zoom: 14,
-        essential: true
-      });
+      try {
+        const { lng, lat } = selectedRestaurant.location.coordinates;
+        map.current.flyTo({
+          center: [lng, lat],
+          zoom: 14,
+          essential: true
+        });
+      } catch (e) {
+        console.log('Error flying to restaurant:', e);
+      }
     }
     
   }, [restaurants, selectedRestaurant, mapLoaded]);

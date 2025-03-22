@@ -76,9 +76,9 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, index }) =>
           <CarouselContent className="-ml-2 md:-ml-4">
             {restaurant.menuItems.map((item, i) => (
               <CarouselItem key={item.id} className="pl-2 md:pl-4 basis-full md:basis-1/2 lg:basis-1/3">
-                <div className="bg-gray-50 rounded-xl overflow-hidden">
-                  {item.image && (
-                    <div className="relative h-48">
+                <div className="bg-gray-50 rounded-xl overflow-hidden h-full flex flex-col">
+                  {item.image ? (
+                    <div className="relative h-48 w-full">
                       <img 
                         src={item.image} 
                         alt={item.name} 
@@ -86,8 +86,12 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, index }) =>
                         loading="lazy"
                       />
                     </div>
+                  ) : (
+                    <div className="relative h-48 w-full bg-gray-200 flex items-center justify-center">
+                      <span className="text-gray-400">No image</span>
+                    </div>
                   )}
-                  <div className="p-4">
+                  <div className="p-4 flex-1 flex flex-col">
                     <div className="flex justify-between items-start mb-2">
                       <h4 className="text-lg font-bold text-gray-900">{item.name}</h4>
                       <span className="font-bold text-gray-900">{item.price} kr</span>
@@ -99,7 +103,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, index }) =>
                     </div>
                     
                     {/* Included Items */}
-                    <div className="flex items-center space-x-3 mt-2">
+                    <div className="flex items-center space-x-3 mt-auto">
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>
